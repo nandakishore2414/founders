@@ -1,17 +1,5 @@
 ﻿import React from 'react';
-import {
-  Camera,
-  Search,
-  Heart,
-  MessageCircle,
-  Send,
-  MoreVertical,
-  Music2,
-  Home,
-  Play,
-  ShoppingBag,
-  User
-} from 'lucide-react';
+import { Heart, MessageCircle, Send, MoreVertical, Music2, ArrowLeft, Bookmark } from 'lucide-react';
 
 const reels = [
   {
@@ -52,42 +40,22 @@ const reels = [
   }
 ];
 
-const Shorts = () => {
+const Shorts = ({ onBack }) => {
   return (
-    <div className="min-h-screen bg-[#0b0b0b] text-white flex items-center justify-center p-4">
-      <div className="relative h-[min(900px,calc(100vh-2rem))] w-full max-w-[420px] overflow-hidden rounded-[28px] bg-black shadow-2xl ring-1 ring-white/10">
-        {/* Top bar */}
-        <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none">
-          <div className="flex items-center justify-between px-4 pt-4">
-            <button className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full bg-black/40 hover:bg-black/60 transition">
-              <Camera className="h-5 w-5" />
-            </button>
-            <div className="text-lg font-semibold tracking-wide">Reels</div>
-            <button className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full bg-black/40 hover:bg-black/60 transition">
-              <Search className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
+    <div className="h-screen w-full bg-white flex justify-center items-center relative text-black">
 
-        {/* Feed */}
-        <div className="h-full w-full overflow-y-auto snap-y snap-mandatory">
-          {reels.map((reel) => (
-            <ReelCard key={reel.id} reel={reel} />
-          ))}
-        </div>
+      {/* Back Button */}
+      <button
+        onClick={onBack}
+        className="absolute top-6 left-6 z-50 p-3 bg-gray-100 rounded-full text-black hover:bg-gray-200 transition-all group border border-gray-200 shadow-sm"
+      >
+        <ArrowLeft className="h-6 w-6 group-hover:-translate-x-1 transition-transform" />
+      </button>
 
-        {/* Bottom nav */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
-          <div className="mx-4 mb-4 rounded-2xl bg-black/70 backdrop-blur-md ring-1 ring-white/10">
-            <div className="flex items-center justify-between px-5 py-3 text-white">
-              <NavIcon icon={Home} label="Home" />
-              <NavIcon icon={Search} label="Search" />
-              <NavIcon icon={Play} label="Reels" active />
-              <NavIcon icon={ShoppingBag} label="Shop" />
-              <NavIcon icon={User} label="Profile" />
-            </div>
-          </div>
-        </div>
+      <div className="h-full w-full max-w-[420px] py-6 overflow-y-auto snap-y snap-mandatory no-scrollbar">
+        {reels.map((reel) => (
+          <ReelCard key={reel.id} reel={reel} />
+        ))}
       </div>
     </div>
   );
@@ -95,42 +63,49 @@ const Shorts = () => {
 
 const ReelCard = ({ reel }) => {
   return (
-    <section className="relative h-full w-full snap-start">
-      <img
-        src={reel.background}
-        alt="Reel background"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+    <section className="h-[calc(100vh-48px)] w-full snap-center flex justify-center items-center mb-6 last:mb-0 relative group">
+      {/* Video Container */}
+      <div className="relative h-full w-full bg-black rounded-xl overflow-hidden shadow-2xl border border-gray-100">
+        <img
+          src={reel.background}
+          alt="Reel background"
+          className="absolute inset-0 h-full w-full object-cover opacity-90"
+        />
 
-      <div className="absolute inset-0 flex">
-        <div className="flex w-4/5 flex-col justify-end gap-3 px-4 pb-24">
-          <div className="flex items-center gap-3">
-            <img
-              src={reel.avatar}
-              alt={reel.name}
-              className="h-9 w-9 rounded-full ring-2 ring-white/40"
-            />
-            <div className="text-sm font-semibold">{reel.user}</div>
-            <button className="rounded-full border border-white/60 px-3 py-1 text-xs font-semibold hover:bg-white/10 transition">
-              Follow
-            </button>
-          </div>
-          <div className="text-sm leading-relaxed text-white/90">{reel.caption}</div>
-          <div className="flex items-center gap-2 text-xs text-white/80">
-            <Music2 className="h-3.5 w-3.5" />
-            <span>{reel.audio}</span>
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/80" />
+
+        {/* Content Container */}
+        <div className="absolute inset-0 flex flex-col justify-end p-5">
+          <div className="flex flex-col items-start gap-4">
+            {/* User Info */}
+            <div className="flex items-center gap-3">
+              <img src={reel.avatar} alt={reel.user} className="w-9 h-9 rounded-full border border-white/20" />
+              <span className="text-white font-semibold text-sm hover:underline cursor-pointer">{reel.user}</span>
+              <span className="text-white/60 text-xs">• Follow</span>
+            </div>
+
+            {/* Caption */}
+            <div className="space-y-2 mb-2">
+              <p className="text-white text-sm line-clamp-2 leading-relaxed">{reel.caption}</p>
+              <div className="flex items-center gap-2 text-xs text-white/80 bg-white/10 w-fit px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <Music2 className="w-3 h-3" />
+                <span>{reel.audio}</span>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className="ml-auto flex w-1/5 flex-col items-center justify-end gap-4 pb-28 pr-3 text-white">
-          <ActionIcon icon={Heart} label={reel.likes} />
-          <ActionIcon icon={MessageCircle} label={reel.comments} />
-          <ActionIcon icon={Send} label={reel.shares} />
-          <button className="flex h-11 w-11 items-center justify-center rounded-full bg-black/50 hover:bg-black/70 transition">
-            <MoreVertical className="h-5 w-5" />
-          </button>
-          <div className="h-12 w-12 rounded-lg bg-white/10 ring-1 ring-white/20" />
+      {/* Right Side Actions (Outside Video) */}
+      <div className="absolute -right-16 bottom-0 flex flex-col items-center gap-6 pb-2">
+        <ActionIcon icon={Heart} label={reel.likes} />
+        <ActionIcon icon={MessageCircle} label={reel.comments} />
+        <ActionIcon icon={Send} label={reel.shares} />
+        <ActionIcon icon={Bookmark} />
+        <ActionIcon icon={MoreVertical} />
+        <div className="w-10 h-10 rounded-lg border border-gray-200 overflow-hidden mt-2 bg-gray-100">
+          <img src={reel.avatar} className="w-full h-full object-cover" />
         </div>
       </div>
     </section>
@@ -139,21 +114,12 @@ const ReelCard = ({ reel }) => {
 
 const ActionIcon = ({ icon: Icon, label }) => {
   return (
-    <button className="flex flex-col items-center gap-1 text-xs font-semibold">
-      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/50 hover:bg-black/70 transition">
-        <Icon className="h-5 w-5" />
-      </span>
-      <span className="text-[11px] text-white/90">{label}</span>
-    </button>
-  );
-};
-
-const NavIcon = ({ icon: Icon, label, active }) => {
-  return (
-    <button className={`pointer-events-auto flex flex-col items-center gap-1 text-[10px] ${active ? 'text-white' : 'text-white/60'}`}>
-      <Icon className={`h-5 w-5 ${active ? 'fill-current' : ''}`} />
-      <span>{label}</span>
-    </button>
+    <div className="flex flex-col items-center gap-1 group cursor-pointer">
+      <div className="p-3 rounded-full bg-white hover:bg-gray-50 transition-all border border-gray-200 shadow-sm">
+        <Icon className="h-6 w-6 text-gray-900" fill="transparent" strokeWidth={2} />
+      </div>
+      {label && <span className="text-xs font-medium text-gray-500">{label}</span>}
+    </div>
   );
 };
 
