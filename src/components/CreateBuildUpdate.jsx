@@ -1,8 +1,20 @@
 import React, { useState } from 'react';
-import { CheckCircle2, TrendingUp, ArrowRight, XCircle, Lightbulb, DollarSign, MessageCircle, Users, Image as ImageIcon, X } from 'lucide-react';
+import { CheckCircle2, TrendingUp, ArrowRight, XCircle, Lightbulb, DollarSign, MessageCircle, Users, Image as ImageIcon, X, Lock } from 'lucide-react';
 
-const CreateBuildUpdate = ({ onCancel }) => {
+import AccessRestricted from './AccessRestricted';
+
+const CreateBuildUpdate = ({ onCancel, hasRole }) => {
     const [selectedType, setSelectedType] = useState('Feature Shipped');
+
+    if (!hasRole('founder')) {
+        return (
+            <AccessRestricted
+                role="founder"
+                message="Founder Access Only"
+                description="Only verified founders can post build updates. Switch to Founder Mode to access this feature."
+            />
+        );
+    }
 
     const types = [
         { id: 'Feature Shipped', icon: CheckCircle2, color: 'text-green-600', bg: 'bg-green-50' },
@@ -30,8 +42,8 @@ const CreateBuildUpdate = ({ onCancel }) => {
                                 key={type.id}
                                 onClick={() => setSelectedType(type.id)}
                                 className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all ${selectedType === type.id
-                                        ? `border-gray-900 bg-gray-50 ring-1 ring-gray-900`
-                                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50/50'
+                                    ? `border-gray-900 bg-gray-50 ring-1 ring-gray-900`
+                                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50/50'
                                     }`}
                             >
                                 <div className={`p-2 rounded-full ${type.bg} ${type.color}`}>

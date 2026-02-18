@@ -1,0 +1,31 @@
+# Founder Platform - Feature Concepts & Philosophy
+
+The Founder Platform is a specialized social networking application designed to bridge the gap between startup founders and investors. It moves away from generic social feeds to focus on high-signal updates, structured progress tracking, and immersive discovery.
+
+## 1. Role-Based Experience (Founder vs. Investor Mode)
+- **What it is:** A dual-interface system where the entire application adapts based on whether you are viewing it as a "Founder" or an "Investor". Users can hold both roles and toggle between them.
+- **The Concept:** **Context Switching.** A founder needs tools to build and share (updates, posts), while an investor needs tools to filter and discover (deal flow, metrics). Instead of cluttering one screen with everything, the UI morphs to suit the user's current intent.
+
+## 2. Immersive Shorts (TikTok for Startups)
+- **What it is:** A full-screen, vertical video feed dedicated to startup pitches, product demos, and founder stories. It features snap-scrolling, floating actions, and a transparent sidebar.
+- **The Concept:** **Modern Discovery.** Static pitch decks are boring. Short-form video is the most effective way to capture attention and convey the energy and personality of a founder/product in under 60 seconds.
+
+## 3. Investor Dashboard
+- **What it is:** A dedicated view for investors featuring metrics, trending startups, and "deal flow" filters (Industry, Stage, MRR).
+- **The Concept:** **High-Signal Noise Reduction.** Investors don't want to scroll through random posts; they want data. This dashboard aggregates signals (growth, traction) to help investors find promising startups faster.
+
+## 4. Founder Identity & Reputation
+- **What it is:** A rich profile system that goes beyond a bio. It includes "Reputation Scores," "Response Rates," and a "Build Timeline" of shipped features.
+- **The Concept:** **Proof of Work.** In early-stage startups, credibility is everything. This feature quantifies a founder's reliability and consistency, giving investors confidence that is backed by data, not just claims.
+
+## 5. Structured "Build Updates"
+- **What it is:** A specialized posting format for founders to share specific progress types: "Feature Shipped," "Milestone," "Pivot," or "Revenue." It requires structured fields like "What we did" and "Outcome."
+- **The Concept:** **Building in Public, Properly.** Generic "hustle" posts are low value. Structured updates create a standardized historical record of a startup's execution speed and decision-making quality.
+
+## 6. Founder Network (Discovery)
+- **What it is:** A directory and search interface to find other founders based on industry, stage, or location.
+- **The Concept:** **Peer-to-Peer Learning.** Founders often face similar problems. Improving discoverability helps them connect with peers who are one step ahead or behind them for mentorship and advice.
+
+## 7. Adaptive Navigation
+- **What it is:** A navigation system that changes layout based on context. It uses a standard top header for the main app but switches to a minimal, transparent sidebar for the immersive Shorts view.
+- **The Concept:** **Content-First Design.** The UI recedes when the content (video) demands full attention, but remains accessible and standard when performing utility tasks (messaging, searching).

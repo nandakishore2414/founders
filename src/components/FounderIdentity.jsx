@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 import { MapPin, TrendingUp, Users, DollarSign, Briefcase, ExternalLink, Mail, ArrowRight, Star, Layout, Clock } from 'lucide-react';
 import BuildUpdateCard from './BuildUpdateCard';
 
-const FounderIdentity = () => {
+const FounderIdentity = ({ activeMode, hasRole, user }) => {
     const [activeTab, setActiveTab] = useState('overview');
+    const isFounder = hasRole && hasRole('founder');
+    const canViewAnalytics = hasRole && (hasRole('founder') || hasRole('investor'));
+
+    // Use passed user data or fallback for demo
+    const profileName = user?.name || "Alex Chen";
+    const profileAvatar = user?.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4";
+    const profileRole = isFounder ? "Founder" : "Member";
 
     const UPDATES = [
         {
@@ -61,32 +68,34 @@ const FounderIdentity = () => {
             </div>
 
             {/* Reputation Signals */}
-            <div className="bg-white rounded-xl border border-gray-100 p-4 mb-6 flex items-center justify-between text-sm overflow-x-auto scrollbar-hide">
-                <div className="flex items-center gap-6">
-                    <div className="flex flex-col">
-                        <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Reputation</span>
-                        <div className="flex items-center gap-1.5 font-bold text-gray-900">
-                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                            <span>858</span>
-                            <span className="text-xs text-gray-400 font-normal">Top 5%</span>
+            {canViewAnalytics && (
+                <div className="bg-white rounded-xl border border-gray-100 p-4 mb-6 flex items-center justify-between text-sm overflow-x-auto scrollbar-hide">
+                    <div className="flex items-center gap-6">
+                        <div className="flex flex-col">
+                            <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Reputation</span>
+                            <div className="flex items-center gap-1.5 font-bold text-gray-900">
+                                <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                                <span>858</span>
+                                <span className="text-xs text-gray-400 font-normal">Top 5%</span>
+                            </div>
+                        </div>
+                        <div className="w-px h-8 bg-gray-100"></div>
+                        <div className="flex flex-col">
+                            <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Response Rate</span>
+                            <div className="font-bold text-gray-900">98% <span className="text-xs text-green-500 font-normal">Fast</span></div>
+                        </div>
+                        <div className="w-px h-8 bg-gray-100"></div>
+                        <div className="flex flex-col">
+                            <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Collaborations</span>
+                            <div className="font-bold text-gray-900">12 <span className="text-xs text-gray-400 font-normal">Active</span></div>
                         </div>
                     </div>
-                    <div className="w-px h-8 bg-gray-100"></div>
-                    <div className="flex flex-col">
-                        <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Response Rate</span>
-                        <div className="font-bold text-gray-900">98% <span className="text-xs text-green-500 font-normal">Fast</span></div>
-                    </div>
-                    <div className="w-px h-8 bg-gray-100"></div>
-                    <div className="flex flex-col">
-                        <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Collaborations</span>
-                        <div className="font-bold text-gray-900">12 <span className="text-xs text-gray-400 font-normal">Active</span></div>
+                    <div className="hidden md:flex items-center gap-2">
+                        <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg border border-blue-100">Verified Founder</span>
+                        <span className="px-2 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-lg border border-purple-100">Y-Combinator</span>
                     </div>
                 </div>
-                <div className="hidden md:flex items-center gap-2">
-                    <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg border border-blue-100">Verified Founder</span>
-                    <span className="px-2 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-lg border border-purple-100">Y-Combinator</span>
-                </div>
-            </div>
+            )}
 
             {/* Navigation Tabs */}
             <div className="flex items-center gap-6 border-b border-gray-200 mb-6">
@@ -99,26 +108,31 @@ const FounderIdentity = () => {
                     </div>
                     {activeTab === 'overview' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gray-900 rounded-t-full"></div>}
                 </button>
-                <button
-                    onClick={() => setActiveTab('timeline')}
-                    className={`pb-3 text-sm font-semibold transition-colors relative ${activeTab === 'timeline' ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
-                >
-                    <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4" /> Build Timeline
-                    </div>
-                    {activeTab === 'timeline' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gray-900 rounded-t-full"></div>}
-                </button>
+
+                {isFounder && (
+                    <button
+                        onClick={() => setActiveTab('timeline')}
+                        className={`pb-3 text-sm font-semibold transition-colors relative ${activeTab === 'timeline' ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4" /> Build Timeline
+                        </div>
+                        {activeTab === 'timeline' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gray-900 rounded-t-full"></div>}
+                    </button>
+                )}
             </div>
 
             {activeTab === 'overview' ? (
                 <>
                     {/* Traction Strip */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <StatCard label="Active Users" value="12.5k" trend="+18%" icon={Users} color="text-blue-600" bg="bg-blue-50" />
-                        <StatCard label="MRR" value="$42k" trend="+8%" icon={DollarSign} color="text-green-600" bg="bg-green-50" />
-                        <StatCard label="MoM Growth" value="24%" trend="High" icon={TrendingUp} color="text-purple-600" bg="bg-purple-50" />
-                        <StatCard label="Team Size" value="8" trend="Hiring" icon={Briefcase} color="text-orange-600" bg="bg-orange-50" />
-                    </div>
+                    {canViewAnalytics && (
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <StatCard label="Active Users" value="12.5k" trend="+18%" icon={Users} color="text-blue-600" bg="bg-blue-50" />
+                            <StatCard label="MRR" value="$42k" trend="+8%" icon={DollarSign} color="text-green-600" bg="bg-green-50" />
+                            <StatCard label="MoM Growth" value="24%" trend="High" icon={TrendingUp} color="text-purple-600" bg="bg-purple-50" />
+                            <StatCard label="Team Size" value="8" trend="Hiring" icon={Briefcase} color="text-orange-600" bg="bg-orange-50" />
+                        </div>
+                    )}
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* Founder Section */}
@@ -130,13 +144,13 @@ const FounderIdentity = () => {
 
                                 <div className="flex items-start gap-5">
                                     <img
-                                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4"
+                                        src={profileAvatar}
                                         alt="Founder"
                                         className="w-16 h-16 rounded-full border-2 border-white shadow-md bg-gray-50"
                                     />
                                     <div>
-                                        <h3 className="text-lg font-bold text-gray-900">Alex Chen</h3>
-                                        <p className="text-sm text-gray-500 font-medium mb-3">Ex-Stripe PM • 2x Founder</p>
+                                        <h3 className="text-lg font-bold text-gray-900">{profileName}</h3>
+                                        <p className="text-sm text-gray-500 font-medium mb-3">Ex-Stripe PM • {profileRole}</p>
 
                                         <blockquote className="relative text-gray-600 text-sm italic pl-4 border-l-2 border-indigo-200 leading-relaxed">
                                             "We built FounderPlatform because the fragmentation of startup tools was killing our own productivity. Founders need a unified cockpit, not 50 browser tabs."
@@ -166,21 +180,33 @@ const FounderIdentity = () => {
                             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col gap-3 sticky top-24">
                                 <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Connect</h3>
 
-                                <button className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-blue-100 flex items-center justify-center gap-2 group">
-                                    Visit Website <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                                </button>
+                                {activeMode === 'investor' ? (
+                                    <>
+                                        <button className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-purple-100 flex items-center justify-center gap-2">
+                                            <DollarSign className="w-4 h-4" /> Express Interest
+                                        </button>
+                                        <button className="w-full py-3 px-4 border-2 border-gray-200 hover:border-gray-900 text-gray-700 hover:text-gray-900 font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
+                                            <Star className="w-4 h-4" /> Save Startup
+                                        </button>
+                                        <button className="w-full py-3 px-4 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium rounded-xl transition-colors flex items-center justify-center gap-2">
+                                            Request Pitch Deck
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-blue-100 flex items-center justify-center gap-2 group">
+                                            Visit Website <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                                        </button>
 
-                                <button className="w-full py-3 px-4 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-xl transition-all shadow-md shadow-gray-200 flex items-center justify-center gap-2">
-                                    Request Demo
-                                </button>
+                                        <button className="w-full py-3 px-4 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-xl transition-all shadow-md shadow-gray-200 flex items-center justify-center gap-2">
+                                            Request Demo
+                                        </button>
 
-                                <button className="w-full py-3 px-4 border-2 border-gray-200 hover:border-gray-900 text-gray-700 hover:text-gray-900 font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
-                                    Join Waitlist
-                                </button>
-
-                                <button className="w-full py-2 px-4 text-gray-400 hover:text-indigo-600 text-sm font-medium rounded-xl transition-colors flex items-center justify-center gap-2 mt-2">
-                                    <Star className="w-4 h-4" /> Investor Interest
-                                </button>
+                                        <button className="w-full py-3 px-4 border-2 border-gray-200 hover:border-gray-900 text-gray-700 hover:text-gray-900 font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
+                                            Join Waitlist
+                                        </button>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>

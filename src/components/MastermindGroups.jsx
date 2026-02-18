@@ -1,7 +1,17 @@
 import React from 'react';
 import { Users, Lock, ChevronRight, MessageSquare, Video, FileText } from 'lucide-react';
+import AccessRestricted from './AccessRestricted';
 
-const MastermindGroups = () => {
+const MastermindGroups = ({ hasRole }) => {
+    if (hasRole && !hasRole('founder')) {
+        return (
+            <AccessRestricted
+                role="founder"
+                message="Mastermind Groups"
+                description="Join a mastermind group to accelerate your growth. This feature is exclusive to founders."
+            />
+        );
+    }
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <GroupCard

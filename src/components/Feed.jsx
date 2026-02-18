@@ -1,6 +1,45 @@
 import React, { useState } from 'react';
-import { ThumbsUp, MessageSquare, Repeat, Send, Image, Calendar, Newspaper, MoreHorizontal, X, Globe, Plus, Filter } from 'lucide-react';
+import { ThumbsUp, MessageSquare, Repeat, Send, Image, Calendar, Newspaper, MoreHorizontal, X, Globe, Plus, Filter, Compass } from 'lucide-react';
 import PostCard from './PostCard';
+const TOPICS = [
+    { label: 'AI & ML', color: 'bg-violet-500' },
+    { label: 'SaaS', color: 'bg-blue-500' },
+    { label: 'Fundraising', color: 'bg-emerald-500' },
+    { label: 'Web3', color: 'bg-orange-500' },
+    { label: 'Growth', color: 'bg-rose-500' },
+    { label: 'Product', color: 'bg-amber-500' },
+    { label: 'Hiring', color: 'bg-cyan-500' },
+];
+
+const ExploreTopicsButton = () => {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <div className="flex items-center gap-2 flex-wrap">
+            {/* Main button */}
+            <button
+                onClick={() => setOpen(o => !o)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm transition-all duration-300 shadow-sm ${open ? 'bg-gray-900 text-white' : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-400'
+                    } hover:scale-105`}
+            >
+                <Compass className={`w-4 h-4 transition-transform duration-300 ${open ? 'rotate-45 text-white' : 'text-violet-500'}`} />
+                <span>Explore Topics</span>
+            </button>
+
+            {/* Topic pills fan out to the right */}
+            {TOPICS.map((topic, i) => (
+                <button
+                    key={topic.label}
+                    style={{ transitionDelay: open ? `${i * 40}ms` : `${(TOPICS.length - 1 - i) * 25}ms` }}
+                    className={`${topic.color} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm whitespace-nowrap transition-all duration-300 hover:scale-110 ${open ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-75 pointer-events-none w-0 px-0 overflow-hidden'
+                        }`}
+                >
+                    {topic.label}
+                </button>
+            ))}
+        </div>
+    );
+};
 
 const UPDATES = [
     { name: "TechCrunch", image: "https://ui-avatars.com/api/?name=Tech+Crunch&background=0D8ABC&color=fff" },
@@ -117,6 +156,9 @@ const Feed = () => {
                 </div>
             </div>
 
+            {/* Explore Topics */}
+            <ExploreTopicsButton />
+
             {/* Filter Bar */}
             <div className="flex items-center justify-between px-1">
                 <div className="flex gap-2 text-sm overflow-x-auto scrollbar-hide">
@@ -125,8 +167,8 @@ const Feed = () => {
                             key={f}
                             onClick={() => setFilter(f)}
                             className={`px-3 py-1.5 rounded-full font-medium transition-colors whitespace-nowrap ${filter === f
-                                    ? 'bg-black text-white'
-                                    : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                                ? 'bg-black text-white'
+                                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
                                 }`}
                         >
                             {f}

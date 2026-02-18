@@ -1,0 +1,44 @@
+# Founder Platform - Project Summary
+
+## Overview
+Founder Platform is a social networking web application designed specifically for startup founders. It facilitates connecting, sharing updates, discovering other founders, and learning through short-form content.
+
+## Technology Stack
+- **Frontend Framework**: React 19 (via Vite)
+- **Language**: JavaScript (JSX)
+- **Styling**: Tailwind CSS v4 (using `@tailwindcss/vite` plugin)
+- **Icons**: Lucide React
+- **Build Tool**: Vite
+
+## Key Features & Structure
+
+### 1. Navigation & Layout
+- **Global Header**: Accessible on main views (Home, Network, Profile).
+- **Dedicated Shorts Layout**: The "Shorts" view uses a custom, immersive layout with a transparent icon-only sidebar (`ShortsSidebar.jsx`) instead of the main header, maximizing content space.
+- **Responsive Design**: Mobile-first approach with hidden/shown elements based on viewport size.
+
+### 2. Core Modules
+- **Feed (`Feed.jsx`)**: The central hub for posts and updates from the network.
+- **Shorts (`Shorts.jsx`)**: A TikTok/Reels-style vertical video player.
+  - **Features**: 
+    - Full-height immersive video experience.
+    - Floating action buttons (Like, Comment, Share) positioned outside the video on desktop.
+    - Custom scroll navigation buttons (Up/Down).
+    - Auto-playing videos with play/pause toggle.
+    - Marquee animation for audio tracks.
+- **Founder Discovery (`FounderDiscovery.jsx`)**: A network page to find and connect with other founders.
+- **Founder Identity (`FounderIdentity.jsx`)**: User profile management and display.
+- **Build Updates (`CreateBuildUpdate.jsx`)**: specific post type for sharing startup progress.
+- **Mastermind Groups (`MastermindGroups.jsx`)**: Community-focused group feature.
+- **Messages (`Messages.jsx`)**: Direct messaging interface.
+
+### 3. Recent Updates
+- **Shorts Redesign**: 
+  - Transformed from a basic list to a high-fidelity, immersive experience.
+  - Implemented snap scrolling and keyboard/button navigation.
+  - Refined UI with transparent sidebars and floating actions for a modern feel.
+  - Optimized for desktop viewing by centering content in a mobile-aspect container ('max-w-2xl').
+
+## Component Architecture
+- **App.jsx**: Main entry point handling routing (state-based view switching) and layout logic (Header vs Sidebar).
+- **UI Components**: Modular components for cards (`ReelCard`, `FounderCard`, `PostCard`) and layout elements (`LeftSidebar`, `RightSidebar`).
