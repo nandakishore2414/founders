@@ -1,46 +1,153 @@
-import { Trophy, ChevronRight, Flame } from 'lucide-react';
+import React from 'react';
+import {
+    Zap, Rocket, PenSquare, Flame, Star,
+    UserPlus, ChevronRight, Activity, Users
+} from 'lucide-react';
+import { useData } from '../context/DataContext';
 
 const LeftSidebar = ({ currentView, onNavigate }) => {
+    const { currentFounder, getBuildUpdatesByFounder, connections } = useData();
+
+    // Derived state
+    const founderId = currentFounder?.id || 'founder-1';
+    const buildUpdates = getBuildUpdatesByFounder(founderId);
+    const recentUpdateCount = buildUpdates.length;
+    const pendingConnections = connections.filter(c => c.toId === founderId && c.status === 'pending');
+
+    const formattedScore = currentFounder?.reputation ? currentFounder.reputation.toLocaleString() : '0';
+
     return (
         <div className="py-4 sticky top-20 flex flex-col gap-5 items-stretch pr-2 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-thin">
 
-            {/* Trending Section */}
+            {/* Quick Actions */}
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
-                    <Flame className="w-4 h-4 text-orange-500" />
-                    <h3 className="text-xs font-bold text-gray-900 uppercase tracking-tight">Trending Now</h3>
+                    <Zap className="w-4 h-4 text-amber-500" />
+                    <h3 className="text-xs font-bold text-gray-900 uppercase tracking-tight">Quick Actions</h3>
                 </div>
-                <div className="py-2.5">
-                    <TrendingItem label="AI Startups" badge="Hot" badgeColor="text-orange-600 bg-orange-50 border-orange-100" />
-                    <TrendingItem label="Seed Funding" badge="New" badgeColor="text-blue-600 bg-blue-50 border-blue-100" />
-                    <TrendingItem label="SaaS Growth" badge="12k" badgeColor="text-gray-500 bg-gray-50 border-gray-100" />
-                    <TrendingItem label="Web3 Founders" />
-                    <TrendingItem label="Product Launch" />
-                </div>
-                <div className="px-4 py-2 bg-gray-50/50 border-t border-gray-100">
-                    <button className="text-[10px] font-bold text-gray-500 hover:text-blue-600 transition-colors w-full text-center py-1">
-                        See all trending
+                <div className="p-2 space-y-1">
+                    <button
+                        onClick={() => onNavigate('create-update')}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors group text-left"
+                    >
+                        <div className="w-8 h-8 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
+                            <Rocket className="w-4 h-4 text-orange-600" />
+                        </div>
+                        <span className="text-sm font-semibold text-gray-700 group-hover:text-gray-900">Share Build Update</span>
+                    </button>
+
+                    <button
+                        onClick={() => onNavigate('create-post')}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors group text-left"
+                    >
+                        <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                            <PenSquare className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="text-sm font-semibold text-gray-700 group-hover:text-gray-900">Create Post</span>
                     </button>
                 </div>
             </div>
 
-            {/* Leaderboard Section */}
+            {/* Your Activity */}
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
-                    <Trophy className="w-4 h-4 text-yellow-500" />
-                    <h3 className="text-xs font-bold text-gray-900 uppercase tracking-tight">Top Founders</h3>
+                    <Activity className="w-4 h-4 text-blue-500" />
+                    <h3 className="text-xs font-bold text-gray-900 uppercase tracking-tight">Your Activity</h3>
                 </div>
-                <div className="p-2 space-y-1">
-                    <LeaderboardItem rank={1} name="Alex Chen" score="2.4k" medal="🥇" />
-                    <LeaderboardItem rank={2} name="Priya Sharma" score="2.1k" medal="🥈" />
-                    <LeaderboardItem rank={3} name="Jordan Lee" score="1.8k" medal="🥉" />
-                    <LeaderboardItem rank={4} name="Sam Wilson" score="1.6k" />
+                <div className="p-4 space-y-4">
+                    {/* Streak */}
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <div className="p-1.5 bg-orange-50 rounded-md">
+                                <Flame className="w-4 h-4 text-orange-500" />
+                            </div>
+                            <span className="text-sm font-medium text-gray-600">Build Streak</span>
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">{currentFounder?.streak || 0} Days</span>
+                    </div>
+
+                    {/* Updates */}
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <div className="p-1.5 bg-blue-50 rounded-md">
+                                <Rocket className="w-4 h-4 text-blue-500" />
+                            </div>
+                            <span className="text-sm font-medium text-gray-600">Total Updates</span>
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">{recentUpdateCount}</span>
+                    </div>
+
+                    {/* Reputation */}
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <div className="p-1.5 bg-amber-50 rounded-md">
+                                <Star className="w-4 h-4 text-amber-500" />
+                            </div>
+                            <span className="text-sm font-medium text-gray-600">Reputation</span>
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">{formattedScore}</span>
+                    </div>
                 </div>
                 <div className="px-4 py-2 bg-gray-50/50 border-t border-gray-100">
-                    <button className="text-[10px] font-bold text-gray-500 hover:text-blue-600 transition-colors w-full text-center py-1">
-                        View full leaderboard
+                    <button
+                        onClick={() => onNavigate('profile')}
+                        className="text-[10px] font-bold text-gray-500 hover:text-blue-600 transition-colors w-full text-center py-1"
+                    >
+                        View full profile stats
                     </button>
                 </div>
+            </div>
+
+            {/* Connections */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
+                    <Users className="w-4 h-4 text-blue-500" />
+                    <h3 className="text-xs font-bold text-gray-900 uppercase tracking-tight">Connections</h3>
+                </div>
+
+                {pendingConnections.length > 0 ? (
+                    <div className="p-2 space-y-1">
+                        {pendingConnections.slice(0, 3).map((conn, i) => (
+                            <div key={conn.id || i} className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-600">
+                                        {/* Ideally fetch sender name, using 'U' for now if not available easily without joining */}
+                                        U
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-xs font-semibold text-gray-900">New Request</p>
+                                        <p className="text-[10px] text-gray-500 truncate">{conn.message || 'Wants to connect'}</p>
+                                    </div>
+                                </div>
+                                <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="p-6 text-center">
+                        <div className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <UserPlus className="w-5 h-5 text-gray-400" />
+                        </div>
+                        <p className="text-xs text-gray-500 mb-3">No pending requests</p>
+                        <button
+                            onClick={() => onNavigate('network')}
+                            className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline"
+                        >
+                            Find founders
+                        </button>
+                    </div>
+                )}
+
+                {pendingConnections.length > 0 && (
+                    <div className="px-4 py-2 bg-gray-50/50 border-t border-gray-100">
+                        <button
+                            onClick={() => onNavigate('network')}
+                            className="text-[10px] font-bold text-gray-500 hover:text-blue-600 transition-colors w-full text-center py-1"
+                        >
+                            Manage connections
+                        </button>
+                    </div>
+                )}
             </div>
 
             <footer className="px-4 py-2 text-xs text-gray-400 text-center">
@@ -49,36 +156,5 @@ const LeftSidebar = ({ currentView, onNavigate }) => {
         </div>
     );
 };
-
-
-const TrendingItem = ({ label, badge, badgeColor }) => (
-    <a href="#" className="flex items-center justify-between px-4 py-2 hover:bg-gray-50 transition-colors group">
-        <div className="flex items-center gap-3">
-            <div className="w-1 h-1 rounded-full bg-gray-300 group-hover:bg-blue-500 transition-all"></div>
-            <span className="text-[13px] text-gray-600 group-hover:text-gray-900 font-medium">{label}</span>
-        </div>
-        {badge && (
-            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${badgeColor}`}>
-                {badge}
-            </span>
-        )}
-    </a>
-);
-
-const LeaderboardItem = ({ rank, name, score, medal }) => (
-    <a href="#" className="flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors group">
-        <div className="w-4 text-center">
-            {medal ? <span className="text-sm">{medal}</span> : <span className="text-[10px] font-bold text-gray-300">#{rank}</span>}
-        </div>
-        <div className="w-7 h-7 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center flex-shrink-0">
-            <span className="text-[10px] font-bold text-gray-500">{name.charAt(0)}</span>
-        </div>
-        <div className="flex-1 min-w-0">
-            <h4 className="text-[12px] font-bold text-gray-700 group-hover:text-gray-900 truncate">{name}</h4>
-            <p className="text-[9px] text-gray-400 font-medium">{score} pts</p>
-        </div>
-        <ChevronRight className="w-3 h-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
-    </a>
-);
 
 export default LeftSidebar;

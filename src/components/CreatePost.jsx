@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Video, FileText, TrendingUp, Play, CheckCircle2, HelpCircle, Briefcase, BarChart2, Image as ImageIcon, Plus, X } from 'lucide-react';
+import { useData } from '../context/DataContext';
 
-const CreatePost = ({ onCancel }) => {
+const CreatePost = ({ onCancel, user, currentUserId }) => {
     const [selectedFormat, setSelectedFormat] = useState('Video');
+    const [formData, setFormData] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { addPost } = useData();
 
     const formats = [
         { id: 'Video', icon: Video, label: "Explainer Video", desc: "Short video update" },
@@ -42,24 +46,51 @@ const CreatePost = ({ onCancel }) => {
 
             {/* Dynamic Form */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8 animate-in fade-in zoom-in-95 duration-200">
-                {selectedFormat === 'Video' && <VideoForm />}
-                {selectedFormat === 'Thread' && <ThreadForm />}
-                {selectedFormat === 'Case Study' && <CaseStudyForm />}
-                {selectedFormat === 'Hiring' && <HiringForm />}
-                {selectedFormat === 'Poll' && <PollForm />}
+                {selectedFormat === 'Video' && <VideoForm formData={formData} setFormData={setFormData} />}
+                {selectedFormat === 'Thread' && <ThreadForm formData={formData} setFormData={setFormData} />}
+                {selectedFormat === 'Case Study' && <CaseStudyForm formData={formData} setFormData={setFormData} />}
+                {selectedFormat === 'Hiring' && <HiringForm formData={formData} setFormData={setFormData} />}
+                {selectedFormat === 'Poll' && <PollForm formData={formData} setFormData={setFormData} />}
                 {/* Fallback for others */}
-                {['Demo', 'Milestone', 'AMA'].includes(selectedFormat) && <GenericForm type={selectedFormat} />}
+                {['Demo', 'Milestone', 'AMA'].includes(selectedFormat) && <GenericForm type={selectedFormat} formData={formData} setFormData={setFormData} />}
 
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-3 pt-6 mt-6 border-t border-gray-100">
                     <button
                         onClick={onCancel}
                         className="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                        disabled={isSubmitting}
                     >
                         Cancel
                     </button>
-                    <button className="px-6 py-2.5 text-sm font-bold text-white bg-gray-900 hover:bg-black rounded-lg shadow-lg shadow-gray-200 transition-all transform hover:-translate-y-0.5">
-                        Publish {selectedFormat}
+                    <button
+                        onClick={async () => {
+                            setIsSubmitting(true);
+                            try {
+                                addPost({
+                                    type: selectedFormat,
+                                    founderId: currentUserId,
+                                    founderName: user?.name || 'Founder',
+                                    founderAvatar: user?.avatar || '',
+                                    startupName: 'Startup', // Would come from user profile
+                                    content: formData,
+                                    time: 'just now'
+                                });
+                                setFormData({});
+                                onCancel();
+                            } catch (error) {
+                                console.error('Error publishing post:', error);
+                                alert('Failed to publish post. Please try again.');
+                            } finally {
+                                setIsSubmitting(false);
+                            }
+                        }}
+                        disabled={isSubmitting}
+                        className={`px-6 py-2.5 text-sm font-bold text-white rounded-lg shadow-lg shadow-gray-200 transition-all transform hover:-translate-y-0.5 ${
+                            isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-900 hover:bg-black'
+                        }`}
+                    >
+                        {isSubmitting ? 'Publishing...' : `Publish ${selectedFormat}`}
                     </button>
                 </div>
             </div>
@@ -197,15 +228,25 @@ const PollForm = () => (
     </div>
 );
 
-const GenericForm = ({ type }) => (
+const GenericForm = ({ type, formData, setFormData }) => (
     <div className="space-y-6">
         <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">{type} Title</label>
-            <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gray-900 focus:ring-0 text-gray-900" />
+            <input
+                type="text"
+                value={formData.title || ''}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gray-900 focus:ring-0 text-gray-900"
+            />
         </div>
         <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">Description</label>
-            <textarea rows="5" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gray-900 focus:ring-0 text-gray-900 resize-none"></textarea>
+            <textarea
+                rows="5"
+                value={formData.description || ''}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gray-900 focus:ring-0 text-gray-900 resize-none"
+            ></textarea>
         </div>
         <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">Attachment (Optional)</label>

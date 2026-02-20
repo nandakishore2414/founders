@@ -7,7 +7,7 @@ const Header = ({ currentView, onNavigate, user, activeMode, hasRole, switchMode
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
     return (
-        <header className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60 sticky-header-transition">
+        <header className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-blue-100/80 sticky-header-transition">
             <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
 
                 {/* Left: Logo & Mobile Menu */}
@@ -33,7 +33,7 @@ const Header = ({ currentView, onNavigate, user, activeMode, hasRole, switchMode
                         {/* Mode Badge */}
                         {user.roles.length > 1 && (
                             <span className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded border ml-1 tracking-wider ${activeMode === 'investor'
-                                ? 'bg-purple-50 text-purple-600 border-purple-200'
+                                ? 'bg-blue-100 text-blue-700 border-blue-200'
                                 : 'bg-blue-50 text-blue-600 border-blue-200'
                                 }`}>
                                 {activeMode}
@@ -43,7 +43,7 @@ const Header = ({ currentView, onNavigate, user, activeMode, hasRole, switchMode
                 </div>
 
                 {/* Center: Navigation */}
-                <nav className="hidden md:flex items-center gap-1 bg-gray-100/50 p-1 rounded-full border border-gray-200/50">
+                <nav className="hidden md:flex items-center gap-1 bg-blue-50/70 p-1 rounded-full border border-blue-100/80">
 
                     {layout === 'founder' ? (
                         <>
@@ -60,6 +60,12 @@ const Header = ({ currentView, onNavigate, user, activeMode, hasRole, switchMode
                                 onClick={() => onNavigate('network')}
                             />
                             <NavItem
+                                icon={Briefcase}
+                                label="Startup"
+                                active={currentView === 'startup'}
+                                onClick={() => onNavigate('startup')}
+                            />
+                            <NavItem
                                 icon={Play}
                                 label="Shorts"
                                 active={currentView === 'shorts'}
@@ -67,9 +73,9 @@ const Header = ({ currentView, onNavigate, user, activeMode, hasRole, switchMode
                             />
                             <NavItem
                                 icon={UserCircle}
-                                label="Founder"
-                                active={currentView === 'founder'}
-                                onClick={() => onNavigate('founder')}
+                                label="Profile"
+                                active={currentView === 'founder' || currentView === 'profile'}
+                                onClick={() => onNavigate('profile')}
                             />
                         </>
                     ) : (
@@ -135,9 +141,9 @@ const Header = ({ currentView, onNavigate, user, activeMode, hasRole, switchMode
                     {layout === 'founder' && hasRole('founder') && (
                         <button
                             onClick={() => onNavigate('create-post')}
-                            className="hidden md:flex items-center gap-2 pl-1 pr-3 py-1 bg-gray-900 hover:bg-gray-800 text-white rounded-full transition-all text-sm font-medium ml-2"
+                            className="hidden md:flex items-center gap-2 pl-1 pr-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all text-sm font-medium ml-2 shadow-sm shadow-blue-200"
                         >
-                            <Plus className="w-4 h-4 bg-gray-700/50 rounded-full p-0.5" />
+                            <Plus className="w-4 h-4 bg-blue-500/50 rounded-full p-0.5" />
                             <span>Post</span>
                         </button>
                     )}
@@ -145,7 +151,7 @@ const Header = ({ currentView, onNavigate, user, activeMode, hasRole, switchMode
                     {/* Profile & Mode Switcher */}
                     <div className="relative">
                         <div
-                            className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden border border-gray-100 cursor-pointer ml-1 hover:ring-2 ring-gray-200 transition-all"
+                            className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden border border-gray-100 cursor-pointer ml-1 hover:ring-2 ring-blue-300 transition-all"
                             onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                         >
                             <img src={user.avatar} alt="Profile" />
@@ -167,7 +173,7 @@ const Header = ({ currentView, onNavigate, user, activeMode, hasRole, switchMode
                                             <p className="text-[10px] uppercase font-bold text-gray-400 px-2 py-1 tracking-wider">Switch Mode</p>
                                             <button
                                                 onClick={() => { switchMode('founder'); setIsProfileMenuOpen(false); }}
-                                                className={`flex items-center justify-between w-full px-2 py-2 text-sm rounded-lg ${activeMode === 'founder' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-600'}`}
+                                                className={`flex items-center justify-between w-full px-2 py-2 text-sm rounded-lg ${activeMode === 'founder' ? 'bg-blue-600 text-white' : 'hover:bg-blue-50 text-gray-600'}`}
                                             >
                                                 <div className="flex items-center gap-2">
                                                     <Zap className="w-4 h-4" />
@@ -177,7 +183,7 @@ const Header = ({ currentView, onNavigate, user, activeMode, hasRole, switchMode
                                             </button>
                                             <button
                                                 onClick={() => { switchMode('investor'); setIsProfileMenuOpen(false); }}
-                                                className={`flex items-center justify-between w-full px-2 py-2 text-sm rounded-lg ${activeMode === 'investor' ? 'bg-purple-50 text-purple-600' : 'hover:bg-gray-50 text-gray-600'}`}
+                                                className={`flex items-center justify-between w-full px-2 py-2 text-sm rounded-lg ${activeMode === 'investor' ? 'bg-blue-700 text-white' : 'hover:bg-blue-50 text-gray-600'}`}
                                             >
                                                 <div className="flex items-center gap-2">
                                                     <Briefcase className="w-4 h-4" />
@@ -194,6 +200,16 @@ const Header = ({ currentView, onNavigate, user, activeMode, hasRole, switchMode
                                         <button onClick={() => { onSwitchRole('founder'); setIsProfileMenuOpen(false); }} className="w-full text-left px-2 py-1.5 text-xs text-gray-600 hover:bg-gray-50 rounded-lg">Founder Only</button>
                                         <button onClick={() => { onSwitchRole('investor'); setIsProfileMenuOpen(false); }} className="w-full text-left px-2 py-1.5 text-xs text-gray-600 hover:bg-gray-50 rounded-lg">Investor Only</button>
                                         <button onClick={() => { onSwitchRole('founder_investor'); setIsProfileMenuOpen(false); }} className="w-full text-left px-2 py-1.5 text-xs text-gray-600 hover:bg-gray-50 rounded-lg">Founder + Investor</button>
+                                    </div>
+
+                                    <div className="p-2 border-t border-gray-100">
+                                        <button
+                                            onClick={() => { onNavigate('profile'); setIsProfileMenuOpen(false); }}
+                                            className="flex items-center gap-2 w-full text-left px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg font-medium"
+                                        >
+                                            <UserCircle className="w-4 h-4" />
+                                            My Profile
+                                        </button>
                                     </div>
 
                                     <div className="p-2 border-t border-gray-100">
@@ -230,8 +246,8 @@ const NavItem = ({ icon: Icon, label, active, onClick }) => (
     <button
         onClick={onClick}
         className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${active
-            ? 'bg-white text-blue-600 shadow-sm'
-            : 'text-gray-500 hover:text-gray-900 hover:bg-gray-200/50'
+            ? 'bg-blue-600 text-white shadow-sm shadow-blue-200'
+            : 'text-blue-900/60 hover:text-blue-900 hover:bg-blue-100/70'
             }`}
     >
         <Icon className={`w-4 h-4 ${active ? 'fill-current' : ''}`} strokeWidth={active ? 2.5 : 2} />

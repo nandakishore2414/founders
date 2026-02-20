@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ThumbsUp, MessageSquare, Repeat, Send, Image, Calendar, Newspaper, MoreHorizontal, X, Globe, Plus, Filter, Compass } from 'lucide-react';
 import PostCard from './PostCard';
+import BuildUpdateCard from './BuildUpdateCard';
+import { useData } from '../context/DataContext';
 const TOPICS = [
     { label: 'AI & ML', color: 'bg-violet-500' },
     { label: 'SaaS', color: 'bg-blue-500' },
@@ -52,72 +54,44 @@ const UPDATES = [
 
 const Feed = () => {
     const [filter, setFilter] = useState('All');
+    const { getFeedItems, founders } = useData();
 
-    const POSTS = [
-        {
-            type: 'Video',
-            founderName: "Sarah Jones",
-            founderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-            startupName: "AI Video Gen",
-            time: "2h ago",
-            content: {
-                title: "Introducing Scene Stitcher 2.0",
-                summary: "We've completely rewritten our rendering engine. It's 4x faster and handles 4k exports.",
-                duration: "1:45",
-                thumbnail: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-                cta: "Try Beta"
-            },
-            engagement: { insightful: 34, saves: 12, comments: 8 }
-        },
-        {
-            type: 'Case Study',
-            founderName: "David Chen",
-            founderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
-            startupName: "GrowthHacker Tool",
-            time: "5h ago",
-            content: {
-                title: "How we fixed our onboarding drop-off",
-                problem: "60% of users dropped off at the email verification step.",
-                action: "We implemented magic link login and deferred password creation.",
-                result: "Activation rate jumped from 40% to 75% in one week."
-            },
-            engagement: { insightful: 89, saves: 45, comments: 23 }
-        },
-        {
-            type: 'Hiring',
-            founderName: "Emily White",
-            founderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
-            startupName: "FinTech Flow",
-            time: "1d ago",
-            content: {
-                role: "Senior Backend Engineer",
-                location: "Remote (US/EU)",
-                salary: "$140k - $180k + 0.5%",
-                skills: ["Node.js", "PostgreSQL", "AWS"]
-            },
-            engagement: { insightful: 12, saves: 5, comments: 4 }
-        },
-        {
-            type: 'Poll',
-            founderName: "Mark Zuckerberg",
-            founderAvatar: "https://ui-avatars.com/api/?name=Mark+Zuckerberg&background=random",
-            startupName: "Meta",
-            time: "3m ago",
-            content: {
-                question: "What's the most critical metric for Series A?",
-                options: [
-                    { text: "ARR Growth", percent: 45 },
-                    { text: "Retention", percent: 35 },
-                    { text: "LTV/CAC", percent: 20 }
-                ],
-                totalVotes: 1240,
-                timeLeft: "2 days"
-            },
-            engagement: { insightful: 56, saves: 2, comments: 145 }
+    // Get feed items (posts + build updates) and format them
+    const feedItems = useMemo(() => {
+        const items = getFeedItems();
+        return items.map(item => {
+            if (item.itemType === 'buildUpdate') {
+                // Format build update for display
+                const founder = founders.find(f => f.id === item.founderId);
+                return {
+                    ...item,
+                    founderName: founder?.name || item.founderName || 'Founder',
+                    founderAvatar: founder?.avatar || item.founderAvatar || '',
+                    startupName: founder?.startupName || item.startupName || 'Startup',
+                    time: item.time || 'just now'
+                };
+            } else {
+                // Format post for display
+                const founder = founders.find(f => f.id === item.founderId);
+                return {
+                    ...item,
+                    founderName: founder?.name || item.founderName || 'Founder',
+                    founderAvatar: founder?.avatar || item.founderAvatar || '',
+                    startupName: founder?.startupName || item.startupName || 'Startup',
+                    time: item.time || 'just now',
+                    engagement: item.engagement || { insightful: 0, saves: 0, comments: 0 }
+                };
+            }
+        });
+    }, [getFeedItems, founders]);
+
+    const filteredItems = useMemo(() => {
+        if (filter === 'All') return feedItems;
+        if (filter === 'Build Update') {
+            return feedItems.filter(item => item.itemType === 'buildUpdate');
         }
-    ];
-
-    const filteredPosts = filter === 'All' ? POSTS : POSTS.filter(post => post.type === filter);
+        return feedItems.filter(item => item.itemType === 'post' && item.type === filter);
+    }, [feedItems, filter]);
 
     return (
         <div className="space-y-4 pb-10">
@@ -162,7 +136,7 @@ const Feed = () => {
             {/* Filter Bar */}
             <div className="flex items-center justify-between px-1">
                 <div className="flex gap-2 text-sm overflow-x-auto scrollbar-hide">
-                    {['All', 'Video', 'Case Study', 'Hiring', 'Poll'].map((f) => (
+                    {['All', 'Build Update', 'Video', 'Case Study', 'Hiring', 'Poll'].map((f) => (
                         <button
                             key={f}
                             onClick={() => setFilter(f)}
@@ -180,11 +154,28 @@ const Feed = () => {
                 </button>
             </div>
 
-            {/* Posts */}
+            {/* Posts & Build Updates */}
             <div className="space-y-4">
-                {filteredPosts.map((post, index) => (
-                    <PostCard key={index} {...post} />
-                ))}
+                {filteredItems.length === 0 ? (
+                    <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
+                        <p className="text-gray-500">No posts yet. Be the first to share!</p>
+                    </div>
+                ) : (
+                    filteredItems.map((item, index) => {
+                        if (item.itemType === 'buildUpdate') {
+                            return (
+                                <BuildUpdateCard
+                                    key={item.id || index}
+                                    {...item}
+                                />
+                            );
+                        } else {
+                            return (
+                                <PostCard key={item.id || index} {...item} />
+                            );
+                        }
+                    })
+                )}
             </div>
         </div>
     );

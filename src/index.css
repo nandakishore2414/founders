@@ -2,21 +2,70 @@
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .animate-marquee {
   display: inline-block;
   animation: marquee 10s linear infinite;
+}
+
+/* Profile Page Animations */
+@keyframes profileEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gridItemIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.profile-page-enter {
+  animation: profileEnter 0.5s ease-out;
+}
+
+.profile-grid-item {
+  animation: gridItemIn 0.4s ease-out both;
+}
+
+.avatar-ring-glow {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+
+.avatar-ring-glow:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
 }

@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import Feed from './components/Feed';
 import Header from './components/Header';
 import LeftSidebar from './components/LeftSidebar';
@@ -13,6 +13,7 @@ import Messages from './components/Messages';
 import InvestorDashboard from './components/InvestorDashboard';
 import FounderLayout from './components/FounderLayout';
 import InvestorLayout from './components/InvestorLayout';
+import { DataProvider } from './context/DataContext';
 
 function App() {
   const [currentView, setCurrentView] = useState('home');
@@ -49,10 +50,27 @@ function App() {
   };
 
   const isShortsView = currentView === 'shorts';
+  const currentUserId = 'founder-1'; // Default to first founder for demo
 
   if (activeMode === 'investor' && hasRole('investor')) {
     return (
-      <InvestorLayout
+      <DataProvider currentUserId={currentUserId}>
+        <InvestorLayout
+          currentView={currentView}
+          onNavigate={setCurrentView}
+          user={user}
+          activeMode={activeMode}
+          hasRole={hasRole}
+          switchMode={switchMode}
+          onSwitchRole={handleRoleChange}
+        />
+      </DataProvider>
+    );
+  }
+
+  return (
+    <DataProvider currentUserId={currentUserId}>
+      <FounderLayout
         currentView={currentView}
         onNavigate={setCurrentView}
         user={user}
@@ -61,19 +79,7 @@ function App() {
         switchMode={switchMode}
         onSwitchRole={handleRoleChange}
       />
-    );
-  }
-
-  return (
-    <FounderLayout
-      currentView={currentView}
-      onNavigate={setCurrentView}
-      user={user}
-      activeMode={activeMode}
-      hasRole={hasRole}
-      switchMode={switchMode}
-      onSwitchRole={handleRoleChange}
-    />
+    </DataProvider>
   );
 }
 

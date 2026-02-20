@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { X, Send, CheckCircle2, AlertCircle, Shield } from 'lucide-react';
+import { useData } from '../context/DataContext';
 
-const ConnectionModal = ({ isOpen, onClose, founderName, startupName }) => {
+const ConnectionModal = ({ isOpen, onClose, founderName, startupName, founderId, currentUserId }) => {
     if (!isOpen) return null;
 
     const [type, setType] = useState('');
     const [message, setMessage] = useState('');
     const [sent, setSent] = useState(false);
+    const { sendConnectionRequest } = useData();
 
     const connectionTypes = [
         { id: 'partnership', label: 'Partnership', desc: 'Explore mutual growth' },
@@ -17,15 +19,21 @@ const ConnectionModal = ({ isOpen, onClose, founderName, startupName }) => {
         { id: 'general', label: 'General Connect', desc: 'Just saying hi' },
     ];
 
-    const handleSend = () => {
-        if (!type) return;
-        setSent(true);
-        setTimeout(() => {
-            setSent(false);
-            onClose();
-            setType('');
-            setMessage('');
-        }, 2000);
+    const handleSend = async () => {
+        if (!type || !founderId || !currentUserId) return;
+        try {
+            sendConnectionRequest(currentUserId, founderId, type, message.trim());
+            setSent(true);
+            setTimeout(() => {
+                setSent(false);
+                onClose();
+                setType('');
+                setMessage('');
+            }, 2000);
+        } catch (error) {
+            console.error('Error sending connection request:', error);
+            alert('Failed to send connection request. Please try again.');
+        }
     };
 
     return (

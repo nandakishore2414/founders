@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { CheckCircle2, TrendingUp, ArrowRight, XCircle, Lightbulb, DollarSign, MessageCircle, Users, Image as ImageIcon, X, Lock } from 'lucide-react';
-
+import { useData } from '../context/DataContext';
 import AccessRestricted from './AccessRestricted';
 
-const CreateBuildUpdate = ({ onCancel, hasRole }) => {
+const CreateBuildUpdate = ({ onCancel, hasRole, user, currentUserId }) => {
     const [selectedType, setSelectedType] = useState('Feature Shipped');
+    const [headline, setHeadline] = useState('');
+    const [whatWeDid, setWhatWeDid] = useState('');
+    const [outcome, setOutcome] = useState('');
+    const [lesson, setLesson] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { addBuildUpdate } = useData();
 
     if (!hasRole('founder')) {
         return (
@@ -61,12 +67,15 @@ const CreateBuildUpdate = ({ onCancel, hasRole }) => {
                 <div>
                     <div className="flex justify-between mb-1">
                         <label className="block text-sm font-bold text-gray-700">Headline <span className="text-red-500">*</span></label>
-                        <span className="text-xs text-gray-400">0/60</span>
+                        <span className="text-xs text-gray-400">{headline.length}/60</span>
                     </div>
                     <input
                         type="text"
+                        value={headline}
+                        onChange={(e) => setHeadline(e.target.value.slice(0, 60))}
                         placeholder="e.g. Launched onboarding v2"
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gray-900 focus:ring-0 transition-colors text-gray-900 font-medium placeholder:font-normal"
+                        maxLength={60}
                     />
                 </div>
 
@@ -74,12 +83,15 @@ const CreateBuildUpdate = ({ onCancel, hasRole }) => {
                 <div>
                     <div className="flex justify-between mb-1">
                         <label className="block text-sm font-bold text-gray-700">What We Did <span className="text-red-500">*</span></label>
-                        <span className="text-xs text-gray-400">0/300</span>
+                        <span className="text-xs text-gray-400">{whatWeDid.length}/300</span>
                     </div>
                     <textarea
                         rows="3"
+                        value={whatWeDid}
+                        onChange={(e) => setWhatWeDid(e.target.value.slice(0, 300))}
                         placeholder="Explain clearly what changed..."
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gray-900 focus:ring-0 transition-colors text-gray-900 resize-none"
+                        maxLength={300}
                     ></textarea>
                 </div>
 
@@ -89,6 +101,8 @@ const CreateBuildUpdate = ({ onCancel, hasRole }) => {
                         <label className="block text-sm font-bold text-gray-700 mb-1">Outcome / Result <span className="text-xs font-normal text-gray-400">(Optional)</span></label>
                         <textarea
                             rows="3"
+                            value={outcome}
+                            onChange={(e) => setOutcome(e.target.value)}
                             placeholder="e.g. User activation increased by 18%"
                             className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-0 transition-colors text-gray-900 resize-none bg-blue-50/20 focus:bg-white"
                         ></textarea>
@@ -97,6 +111,8 @@ const CreateBuildUpdate = ({ onCancel, hasRole }) => {
                         <label className="block text-sm font-bold text-gray-700 mb-1">Key Lesson <span className="text-xs font-normal text-gray-400">(Optional)</span></label>
                         <textarea
                             rows="3"
+                            value={lesson}
+                            onChange={(e) => setLesson(e.target.value)}
                             placeholder="Short insight other founders can apply..."
                             className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-amber-500 focus:ring-0 transition-colors text-gray-900 resize-none bg-amber-50/20 focus:bg-white"
                         ></textarea>
@@ -120,11 +136,45 @@ const CreateBuildUpdate = ({ onCancel, hasRole }) => {
                     <button
                         onClick={onCancel}
                         className="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                        disabled={isSubmitting}
                     >
-                        Save Draft
+                        Cancel
                     </button>
-                    <button className="px-6 py-2.5 text-sm font-bold text-white bg-gray-900 hover:bg-black rounded-lg shadow-lg shadow-gray-200 transition-all transform hover:-translate-y-0.5">
-                        Publish Update
+                    <button
+                        onClick={async () => {
+                            if (!headline.trim() || !whatWeDid.trim()) {
+                                alert('Please fill in the required fields (Headline and What We Did)');
+                                return;
+                            }
+                            setIsSubmitting(true);
+                            try {
+                                addBuildUpdate({
+                                    type: selectedType,
+                                    headline: headline.trim(),
+                                    whatWeDid: whatWeDid.trim(),
+                                    outcome: outcome.trim() || undefined,
+                                    lesson: lesson.trim() || undefined,
+                                    founderId: currentUserId,
+                                    founderName: user?.name || 'Founder',
+                                    founderAvatar: user?.avatar || '',
+                                    startupName: 'Startup' // Would come from user profile
+                                });
+                                onCancel(); // Navigate back
+                            } catch (error) {
+                                console.error('Error publishing update:', error);
+                                alert('Failed to publish update. Please try again.');
+                            } finally {
+                                setIsSubmitting(false);
+                            }
+                        }}
+                        disabled={isSubmitting || !headline.trim() || !whatWeDid.trim()}
+                        className={`px-6 py-2.5 text-sm font-bold text-white rounded-lg shadow-lg shadow-gray-200 transition-all transform hover:-translate-y-0.5 ${
+                            isSubmitting || !headline.trim() || !whatWeDid.trim()
+                                ? 'bg-gray-400 cursor-not-allowed'
+                                : 'bg-gray-900 hover:bg-black'
+                        }`}
+                    >
+                        {isSubmitting ? 'Publishing...' : 'Publish Update'}
                     </button>
                 </div>
             </div>

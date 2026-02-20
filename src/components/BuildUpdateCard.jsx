@@ -33,16 +33,16 @@ const BuildUpdateCard = ({
 
     return (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
-            {/* Header */}
+            {/* Header: Startup name prominent so users know which company this is */}
             <div className="flex justify-between items-start mb-4">
                 <div className="flex gap-3">
-                    <img src={founderAvatar} alt={founderName} className="w-10 h-10 rounded-full border border-gray-100" />
-                    <div>
-                        <div className="flex items-center gap-2">
+                    <img src={founderAvatar} alt={founderName} className="w-10 h-10 rounded-full border border-gray-100 shrink-0" />
+                    <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
                             <h3 className="font-bold text-gray-900 text-sm">{startupName}</h3>
-                            <span className="text-gray-400 text-xs">• {time}</span>
+                            <span className="text-gray-400 text-xs">· {time}</span>
                         </div>
-                        <div className="text-xs text-gray-500">{founderName}</div>
+                        <p className="text-xs text-gray-500">{founderName}</p>
                     </div>
                 </div>
 

@@ -1,0 +1,544 @@
+================================================================================
+  FOUNDER PLATFORM — FEATURE ANALYSIS & GAP REPORT
+  Generated: 2026-02-19
+================================================================================
+
+
+================================================================================
+ 1. APP ARCHITECTURE
+================================================================================
+
+Files: App.jsx, FounderLayout.jsx, InvestorLayout.jsx
+
+WHAT IT IS:
+  - Role-based SPA with two layouts: Founder Mode and Investor Mode.
+  - State: currentView (navigation), activeMode (founder/investor), user object.
+  - User has an array of roles: ["founder", "investor"] or subsets.
+
+FLOW:
+  1. App loads → checks user.roles → defaults to "founder" mode (unless investor-only).
+  2. FounderLayout renders for founder mode, InvestorLayout for investor mode.
+  3. currentView drives which component renders in the content area.
+  4. Header, sidebars, and views change based on activeMode.
+
+AVAILABLE VIEWS (FOUNDER MODE):
+  - home          → Feed
+  - shorts        → Shorts (full-screen, no header)
+  - founder       → FounderIdentity (startup profile)
+  - create-update → CreateBuildUpdate
+  - create-post   → CreatePost
+  - network       → FounderDiscovery
+  - messages      → Messages
+  - profile       → ProfilePage (full-width, no sidebars)
+
+AVAILABLE VIEWS (INVESTOR MODE):
+  - investor-dashboard → InvestorDashboard
+  - discover           → FounderDiscovery
+  - saved              → "Coming Soon" placeholder
+  - messages           → Messages
+  - founder            → FounderIdentity (viewing a founder profile)
+  - home/shorts        → Redirect message to dashboard
+
+GAPS / ISSUES:
+  ✗ handleRoleChange in App.jsx only logs to console — does nothing.
+  ✗ No route/URL support — everything is state-driven, no back button support.
+  ✗ InvestorLayout shows LeftSidebar with hardcoded "Investor Tools", not the
+    shared LeftSidebar component (inconsistency).
+  ✗ "saved" view in InvestorLayout shows AccessRestricted with "coming soon"
+    but is still listed as a nav option — misleading.
+
+
+================================================================================
+ 2. HEADER & NAVIGATION
+================================================================================
+
+File: Header.jsx
+
+WHAT IT IS:
+  - Fixed top navigation bar with logo, nav items, search, actions, profile menu.
+  - Different nav items based on layout (founder vs investor).
+  - Profile dropdown with: My Profile, Settings, Logout, Mode Switch, Role Debug.
+
+FLOW:
+  1. User sees nav: Home, Network, Shorts, Founder Profile (founder layout).
+  2. Clicking nav items calls onNavigate(viewName).
+  3. Profile avatar → dropdown with My Profile, Settings, Logout.
+  4. Mode switch button lets dual-role users toggle founder/investor.
+  5. Role debug selector (DEV ONLY) changes user.roles for testing.
+
+FOUNDER NAV ITEMS: Home, Network, Shorts, Founder Profile
+INVESTOR NAV ITEMS: Dashboard, Discover, Messages
+
+GAPS / ISSUES:
+  ✗ Search bar is visual-only — no search logic implemented.
+  ✗ Notification bell icon has a red dot but no notification system.
+  ✗ Message icon navigates to messages but has no unread count logic.
+  ✗ "Settings" in the dropdown does nothing (no settings page exists).
+  ✗ "Logout" button does nothing (no auth system).
+  ✗ Mobile hamburger menu toggles open but nav items still show as full nav.
+  ✗ Role debug selector is in production UI — should be dev-only/hidden.
+
+
+================================================================================
+ 3. FEED (HOME PAGE)
+================================================================================
+
+File: Feed.jsx, PostCard.jsx
+
+WHAT IT IS:
+  - Main content feed showing posts from founders.
+  - Post types: Video, Thread, Case Study, Hiring, Poll, General.
+  - Story-style "Updates" row at top (avatar circles).
+  - "Explore Topics" pill buttons for content filtering.
+  - Create Post button triggers navigation to create-post view.
+  - Build Update button triggers navigation to create-update view.
+
+FLOW:
+  1. User sees story updates row → explore topics pills → post cards.
+  2. Post cards show: author info, content, images, engagement actions.
+  3. Clicking "Like" toggles like state (local state only).
+  4. Comment/Share/Save interactions are click handlers with no backend.
+  5. "Create a Post" button → navigates to 'create-post' view.
+
+POST CARD FEATURES:
+  - Author name, avatar, description, timestamp
+  - Post type badge (Video, Thread, Case Study, Hiring, Poll)
+  - Content text with "Read more" truncation
+  - Image display
+  - Actions: Like (toggleable), Comment, Share, Save
+
+GAPS / ISSUES:
+  ✗ All posts are hardcoded mock data — no dynamic loading.
+  ✗ Like state is local — resets on navigation.
+  ✗ "Read more" does not expand — text just stays truncated.
+  ✗ Comment button does nothing — no comment section/modal.
+  ✗ Share button does nothing (no share logic or modal).
+  ✗ Save button has no visual feedback or saved items page.
+  ✗ Story "Updates" row is static — clicking stories does nothing.
+  ✗ "Explore Topics" pills have no filtering logic — UI only.
+  ✗ No infinite scroll or pagination — all posts render at once.
+  ✗ No "create post" CTA visible within the feed itself (only on sidebar).
+
+
+================================================================================
+ 4. CREATE POST
+================================================================================
+
+File: CreatePost.jsx
+
+WHAT IT IS:
+  - Multi-format post creation form.
+  - 6 post types: Video Insight, Thread, Case Study, Hiring, Poll, General.
+  - Each type has a different sub-form with relevant fields.
+
+FLOW:
+  1. User navigates to create-post from header or sidebar.
+  2. Sees type selector cards (6 types).
+  3. Selects a type → sub-form appears with type-specific fields.
+  4. Fills fields → clicks "Publish" or "Save Draft" / "Cancel".
+  5. Cancel navigates back to home.
+
+SUB-FORMS:
+  - VideoForm: Title, Video URL, Description, Thumbnail Upload
+  - ThreadForm: Title, multiple thread sections (add/remove), image upload
+  - CaseStudyForm: Title, Problem, Solution, Results, Takeaways
+  - HiringForm: Role Title, Company, Location, Type, Description, Apply Link
+  - PollForm: Question, Options (add/remove), Duration
+  - GenericForm: Title, Content
+
+GAPS / ISSUES:
+  ✗ No form validation at all — can submit empty forms.
+  ✗ No character count tracking despite showing "0/X" labels.
+  ✗ "Publish" button does nothing — no submit handler.
+  ✗ "Save Draft" does nothing — no draft storage.
+  ✗ File/image upload is visual-only — no actual file handling.
+  ✗ No preview of the post before publishing.
+  ✗ Thread sections can be added with "+", remove logic exists, but no 
+    reordering/drag support.
+  ✗ Poll options have no validation (e.g., minimum 2 options).
+  ✗ No access restriction — any role can create posts (intentional?).
+
+
+================================================================================
+ 5. CREATE BUILD UPDATE
+================================================================================
+
+File: CreateBuildUpdate.jsx
+
+WHAT IT IS:
+  - Founder-exclusive structured update form (Founder Access Only).
+  - 7 update types: Feature Shipped, Milestone, Pivot, Failure, Revenue,
+    Insight, Hiring.
+  - Fields: Headline, What We Did, Outcome, Lesson, Attachments.
+
+FLOW:
+  1. Only accessible if user hasRole('founder') — otherwise shows AccessRestricted.
+  2. User selects update type from a visual grid.
+  3. Fills structured fields: Headline (required), What We Did (required),
+     Outcome (optional), Lesson (optional).
+  4. Can add image/video attachment via drag-and-drop zone.
+  5. Actions: "Save Draft" or "Publish Update".
+
+GAPS / ISSUES:
+  ✗ No form validation — required fields are not enforced.
+  ✗ Character counters show "0/60" and "0/300" but don't actually count.
+  ✗ "Publish Update" button has no onClick handler — does nothing.
+  ✗ "Save Draft" calls onCancel (goes back to home) — misleading label.
+  ✗ File upload is visual-only — no actual upload logic.
+  ✗ No preview before publishing.
+  ✗ Headline has a 60 char limit UI hint but no maxLength enforcement.
+
+
+================================================================================
+ 6. SHORTS (REELS/TIKTOK-STYLE)
+================================================================================
+
+File: Shorts.jsx, ShortsSidebar.jsx
+
+WHAT IT IS:
+  - Full-screen vertical video feed (TikTok/Reels style).
+  - Replaces header with a minimal icon sidebar (ShortsSidebar).
+  - Vertical snap-scrolling between short-form content.
+  - Action buttons: Like, Comment, Share, Bookmark, More.
+
+FLOW:
+  1. User clicks "Shorts" in nav → header disappears, ShortsSidebar appears.
+  2. Full-screen vertical content with snap scrolling.
+  3. Like (heart toggle), Bookmark (toggle), Comment/Share/More (no-op).
+  4. Play/Pause toggling on click (visual only — no actual video).
+  5. Mute/unmute button (visual only).
+  6. Navigation: up/down buttons on the right side.
+
+GAPS / ISSUES:
+  ✗ Using static images, NOT actual videos — play/pause is fake.
+  ✗ No actual video playback, muting, or audio.
+  ✗ Likes are local state only.
+  ✗ Comment button does nothing.
+  ✗ Share button does nothing.
+  ✗ "Follow" button does nothing.
+  ✗ Only 3 hardcoded reels — no loading more.
+  ✗ Music/audio label shows but no audio plays.
+  ✗ ShortsSidebar "Profile" nav goes to 'founder' (FounderIdentity),
+    not 'profile' (ProfilePage) — inconsistency.
+
+
+================================================================================
+ 7. FOUNDER IDENTITY (STARTUP PROFILE PAGE)
+================================================================================
+
+File: FounderIdentity.jsx
+
+WHAT IT IS:
+  - Public-facing startup profile page (different from ProfilePage).
+  - Hero section: Startup name, tagline, founder info, key stats, vision quote.
+  - Reputation Signals: Score, Response Rate, Collaborations.
+  - Two tabs: Overview (build updates list) and Build Timeline.
+
+FLOW:
+  1. Accessible via nav → "Founder Profile" or from viewing a founder.
+  2. Shows startup details, reputation metrics (investor-visible analytics).
+  3. Overview tab: Displays build update cards using BuildUpdateCard component.
+  4. Build Timeline tab: Chronological updates (founder-only visibility).
+
+GAPS / ISSUES:
+  ✗ All data is hardcoded — not connected to user state.
+  ✗ No "Edit" functionality for founders viewing their own identity page.
+  ✗ Build Timeline tab only shows if user is a founder — but doesn't check
+    if it's the SAME founder (no ownership concept).
+  ✗ Reputation signals visible only if canViewAnalytics (investor/dual role),
+    but all data is static.
+  ✗ No connection between this page and ProfilePage — user has TWO separate
+    profile pages with different data and layout.
+  ✗ "Respond" / "Save" buttons on updates do nothing.
+
+
+================================================================================
+ 8. PROFILE PAGE (INSTAGRAM-STYLE)
+================================================================================
+
+File: ProfilePage.jsx
+
+WHAT IT IS:
+  - Instagram-inspired personal profile for founders.
+  - Sections: Cover, Avatar, Badges, Startup Card, Traction Metrics,
+    Reputation Bar, Pitch Highlights (stories), Tabbed Content.
+  - Tabs: Overview, Build Timeline, Posts, Team.
+
+FLOW:
+  1. Accessible via Header dropdown → "My Profile".
+  2. Full-width layout (sidebars hidden).
+  3. Shows founder's personal info + startup details.
+  4. Pitch highlights as Instagram-story circles.
+  5. Tabs switch between Overview, Build Timeline, Posts grid, Team list.
+
+GAPS / ISSUES:
+  ✗ ALL DATA IS HARDCODED — nothing comes from props or state.
+    The `user` prop is accepted but almost unused.
+  ✗ "Edit Profile" button does nothing — no edit form exists.
+  ✗ "Edit Cover" button does nothing.
+  ✗ "Share" button does nothing.
+  ✗ "Settings" button does nothing.
+  ✗ "Connect" and "Message" buttons (other-user view) do nothing.
+  ✗ "Visit Website" button does nothing.
+  ✗ "Watch Pitch" button does nothing.
+  ✗ Pitch highlight stories are clickable but do nothing.
+  ✗ Post grid images are from Unsplash — not user's actual posts.
+  ✗ Team members are hardcoded — no team management.
+  ✗ Hiring CTA links do nothing.
+  ✗ Revenue trajectory chart is a static SVG — not real data.
+  ✗ isOwnProfile is hardcoded to true — no logic to detect other profiles.
+  ✗ DUPLICATE: This page and FounderIdentity serve overlapping purposes.
+  ✗ No way to edit bio, update startup info, change avatar, etc.
+
+
+================================================================================
+ 9. FOUNDER NETWORK / DISCOVERY
+================================================================================
+
+Files: FounderDiscovery.jsx, FounderCard.jsx, ConnectionModal.jsx,
+       MastermindGroups.jsx
+
+WHAT IT IS:
+  - Discovery page for finding and connecting with other founders.
+  - Dark gradient hero banner with network stats.
+  - 3 tabs: Discovery (founder cards), Mastermind Groups, Suggested.
+  - Search bar, quick filter pills, advanced expandable filters.
+  - Featured Founders section with premium card layout.
+  - ConnectionModal for structured connection requests.
+  - MastermindGroups for private peer groups.
+
+FLOW (DISCOVERY TAB):
+  1. User sees hero with stats → search bar → quick filters.
+  2. Featured founders shown in 2-col horizontal cards.
+  3. All founders shown in 3-col vertical cards.
+  4. Clicking "Connect" → ConnectionModal opens.
+  5. In modal: select connection type, write message → send request.
+  6. Success state shows briefly, then modal closes.
+
+FLOW (MASTERMIND TAB):
+  1. Shows 4 private groups with themes, activity, next meeting.
+  2. "Request to Join" button on each card.
+  3. "Start a Squad" button in header.
+
+FLOW (SUGGESTED TAB):
+  1. "People You May Know" — 3 suggested cards with mutual connections.
+  2. "In Your Industry" — filtered founder cards matching SaaS industry.
+
+GAPS / ISSUES:
+  ✗ Search input captures state but has no filtering logic.
+  ✗ Quick filter pills toggle active state but don't filter results.
+  ✗ Advanced filters (checkboxes, selects, range) are visual-only.
+  ✗ "Apply Filters" button does nothing.
+  ✗ All founder data is hardcoded in the component.
+  ✗ ConnectionModal "Send Request" doesn't persist — fake success animation.
+  ✗ Mastermind "Request to Join" does nothing.
+  ✗ "Start a Squad" does nothing.
+  ✗ Suggested tab hardcodes "SaaS" as the user's industry.
+  ✗ No pagination or infinite scroll for founder lists.
+  ✗ FounderCard's featured variant uses a locally-defined Flame SVG component
+    instead of importing from lucide-react — potential duplicate/conflict.
+
+
+================================================================================
+ 10. MESSAGES
+================================================================================
+
+File: Messages.jsx
+
+WHAT IT IS:
+  - Split-pane messaging interface: conversation list on left, chat on right.
+  - Conversations have type labels (Partnership, Integration, etc.)
+  - Chat shows message bubbles with read receipts.
+  - Message input with attachment and send button.
+
+FLOW:
+  1. User sees list of conversations on the left.
+  2. Clicking a conversation loads that chat on the right.
+  3. Can type a message → click send → message appears in chat.
+  4. Messages show read receipts (checkmarks).
+
+GAPS / ISSUES:
+  ✗ All conversations and messages are hardcoded.
+  ✗ Sending a message only adds to local state — resets on navigation.
+  ✗ No real-time messaging or WebSocket support.
+  ✗ Attachment button (paperclip) does nothing.
+  ✗ Phone call button does nothing.
+  ✗ Video call button does nothing.
+  ✗ No "new conversation" button — can't start chats.
+  ✗ Search bar in conversation list does nothing.
+  ✗ Read receipt status is static (hardcoded "read"/"delivered").
+  ✗ No typing indicators.
+  ✗ No unread message count/badges.
+
+
+================================================================================
+ 11. SIDEBARS
+================================================================================
+
+Files: LeftSidebar.jsx, RightSidebar.jsx, ShortsSidebar.jsx
+
+LEFT SIDEBAR:
+  - Trending Now: 5 trending topics with badges (Hot, New, count).
+  - Top Founders: Leaderboard with ranks 1-4, medals, scores.
+  - Footer: Copyright.
+
+  GAPS:
+  ✗ Trending items are static — not dynamic.
+  ✗ Clicking "See all trending" does nothing.
+  ✗ Leaderboard items are static.
+  ✗ "View full leaderboard" does nothing.
+  ✗ Leaderboard avatars are initials only — no real images.
+
+RIGHT SIDEBAR:
+  - Profile card: Avatar, name, role, location, stats (posts, connections,
+    reputation), "View Profile" button.
+  - Upcoming Events: 2 static events with date, time, attendees.
+
+  GAPS:
+  ✗ All data is hardcoded — not connected to user state.
+  ✗ "View Profile" button does nothing (no onNavigate prop passed).
+  ✗ "Register" button on events does nothing.
+  ✗ Events are static — no event system.
+
+SHORTS SIDEBAR:
+  - Minimal icon sidebar for Shorts view.
+  - Nav: Home, Networks, Shorts, Profile (founder) or Invest (investor).
+  - Profile avatar at bottom.
+
+  GAPS:
+  ✗ "Profile" link navigates to 'founder' (FounderIdentity) not 'profile'
+    (ProfilePage) — inconsistency with header's "My Profile".
+  ✗ Avatar is hardcoded, not using user.avatar.
+
+
+================================================================================
+ 12. INVESTOR DASHBOARD
+================================================================================
+
+File: InvestorDashboard.jsx
+
+WHAT IT IS:
+  - Dashboard for investors to track deal flow.
+  - Summary cards: Trending Startups (12), Fastest Growing (5), New Matches (8).
+  - Filter bar: Industry, Stage, Min MRR dropdowns.
+  - Placeholder content area (empty state).
+
+FLOW:
+  1. Investor mode → Dashboard shows summary cards.
+  2. Filter dropdowns are interactive but don't filter anything.
+  3. "Export Report" button exists but does nothing.
+
+GAPS / ISSUES:
+  ✗ No actual startup data — just summary cards and empty state.
+  ✗ Filters are visual-only.
+  ✗ "Export Report" does nothing.
+  ✗ No startup cards/list below filters — just "no results" message.
+  ✗ Summary card numbers are hardcoded.
+  ✗ Typo: "compatability" should be "compatibility".
+
+
+================================================================================
+ 13. ACCESS CONTROL
+================================================================================
+
+File: AccessRestricted.jsx
+
+WHAT IT IS:
+  - Generic "access restricted" component shown when a user lacks permissions.
+  - Shows lock icon, message, description, and "Upgrade to [Role]" button.
+
+USED BY:
+  - CreateBuildUpdate (non-founders)
+  - FounderLayout (investor-only views when in founder mode)
+  - InvestorLayout (saved startups placeholder)
+
+GAPS / ISSUES:
+  ✗ "Upgrade to Founder/Investor" button does nothing — no upgrade flow.
+  ✗ No actual permission enforcement server-side (all client-side).
+
+
+================================================================================
+ 14. BUILD UPDATE CARD
+================================================================================
+
+File: BuildUpdateCard.jsx
+
+WHAT IT IS:
+  - Card component for displaying structured build updates.
+  - Shows: founder info, type badge, headline, what was done, outcome, lesson.
+  - Engagement: Insights, Save, Comment buttons.
+
+USED BY: Feed.jsx, FounderIdentity.jsx (overview tab)
+
+GAPS / ISSUES:
+  ✗ Engagement buttons (Insight, Save, Comment) do nothing.
+  ✗ No way to expand/collapse long content.
+  ✗ Image loading has no error state.
+
+
+================================================================================
+================================================================================
+  CRITICAL GAPS SUMMARY — PRIORITIZED
+================================================================================
+================================================================================
+
+CATEGORY 1: BROKEN / MISLEADING UI (Things that look functional but aren't)
+─────────────────────────────────────────────────────────────────────────────
+  1. Profile "Edit Profile" button → no edit form
+  2. "Settings" in dropdown → no settings page
+  3. "Logout" button → no logout logic
+  4. Search bar everywhere → no search logic
+  5. All filter UIs → no filtering logic
+  6. "Publish" on CreatePost & CreateBuildUpdate → no submit handler
+  7. "Save Draft" on CreateBuildUpdate → actually navigates home
+  8. Notification bell → no notification system
+  9. Phone/Video call buttons in Messages → no-op
+  10. "Export Report" on Investor Dashboard → no-op
+
+CATEGORY 2: DATA & STATE (No persistence, all mock)
+─────────────────────────────────────────────────────
+  1. ALL data is hardcoded mock — zero API/backend integration.
+  2. Like/save/follow states reset on navigation.
+  3. Messages sent are lost on navigation.
+  4. No user authentication or sessions.
+  5. No form data persistence (drafts, submissions).
+  6. handleRoleChange only logs — doesn't update roles.
+
+CATEGORY 3: MISSING FEATURES (Expected but not built)
+─────────────────────────────────────────────────────
+  1. NO profile editing (bio, avatar, cover, startup info).
+  2. NO settings page (account, privacy, notifications).
+  3. NO comment system on posts.
+  4. NO follow/follower system.
+  5. NO notifications system.
+  6. NO saved items page (bookmarks).
+  7. NO actual video playback in Shorts.
+  8. NO new conversation creation in Messages.
+  9. NO file upload handling anywhere.
+  10. NO URL routing / deep linking / back button support.
+
+CATEGORY 4: LOGIC ERRORS & INCONSISTENCIES
+─────────────────────────────────────────────
+  1. TWO profile pages exist (ProfilePage + FounderIdentity) serving
+     overlapping purposes with different data and no connection.
+  2. ShortsSidebar "Profile" → goes to 'founder' (FounderIdentity),
+     Header "My Profile" → goes to 'profile' (ProfilePage). Inconsistent.
+  3. ProfilePage.isOwnProfile is hardcoded to true — can never view
+     another user's profile.
+  4. ProfilePage accepts user prop but uses hardcoded FOUNDER object.
+  5. RightSidebar profile card data is not connected to actual user state.
+  6. CreateBuildUpdate "Save Draft" label → actually calls onCancel.
+  7. InvestorDashboard shows "High compatability" — typo.
+  8. FounderCard defines its own Flame SVG instead of importing from
+     lucide-react — potential rendering inconsistency.
+  9. Copyright says "2024" in LeftSidebar.
+  10. Left sidebar only shows on home view but is rendered for all
+      non-shorts, non-profile views (including network, messages, etc.)
+      where trending/leaderboard make less contextual sense.
+
+
+================================================================================
+  COMPONENT FILE COUNT: 21 files
+  TOTAL IDENTIFIED GAPS: 60+
+  DATE: February 19, 2026
+================================================================================
