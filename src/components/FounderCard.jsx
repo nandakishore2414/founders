@@ -25,11 +25,11 @@ const FounderCard = ({
     // Generate a deterministic gradient based on name for the cover
     const getGradient = (str) => {
         const gradients = [
-            'from-blue-600 to-indigo-600',
-            'from-emerald-500 to-teal-600',
+            'from-blue-600 to-blue-700',
+            'from-blue-500 to-cyan-500',
             'from-orange-500 to-red-600',
             'from-pink-500 to-rose-500',
-            'from-purple-600 to-indigo-600',
+            'from-blue-700 to-blue-800',
             'from-cyan-500 to-blue-500',
         ];
         const index = str.length % gradients.length;
@@ -85,7 +85,7 @@ const FounderCard = ({
 
                     {/* Startup first, then founder — so users understand the startup at a glance */}
                     <div className="mb-2">
-                        <p className="text-sm font-bold text-indigo-600">{startupName}</p>
+                        <p className="text-sm font-bold text-blue-600">{startupName}</p>
                         <p className="text-xs text-gray-500 mt-0.5">{name} · {stage}</p>
                     </div>
 
@@ -110,7 +110,7 @@ const FounderCard = ({
                     <div className="mt-auto grid grid-cols-2 gap-3">
                         <button
                             onClick={onConnect}
-                            className="py-2.5 bg-gray-900 text-white rounded-xl text-xs font-bold hover:bg-black transition-all flex items-center justify-center gap-2"
+                            className="py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
                         >
                             <UserPlus className="w-4 h-4" /> Connect
                         </button>
@@ -149,7 +149,7 @@ const FounderCard = ({
 
                 {/* Identity: Startup first so users understand what they're looking at */}
                 <div className="mb-1.5">
-                    <p className="text-xs font-bold text-indigo-600 uppercase tracking-wide">{startupName}</p>
+                    <p className="text-xs font-bold text-blue-600 uppercase tracking-wide">{startupName}</p>
                     <h3 className="font-bold text-gray-900 text-sm">{name}</h3>
                 </div>
 
@@ -177,7 +177,7 @@ const FounderCard = ({
                 <div className="mt-auto pt-3 border-t border-gray-50 flex gap-2">
                     <button
                         onClick={onConnect}
-                        className="flex-1 py-1.5 bg-gray-50 hover:bg-indigo-50 text-gray-600 hover:text-indigo-600 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
+                        className="flex-1 py-1.5 bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
                     >
                         <UserPlus className="w-3.5 h-3.5" /> Connect
                     </button>

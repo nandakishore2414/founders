@@ -37,8 +37,8 @@ const Messages = () => {
 
     const getTypeColor = (type) => {
         const colors = {
-            'Partnership': 'bg-purple-50 text-purple-700 border-purple-100',
-            'Integration': 'bg-blue-50 text-blue-700 border-blue-100',
+            'Partnership': 'bg-blue-50 text-blue-700 border-blue-100',
+            'Integration': 'bg-blue-100 text-blue-800 border-blue-200',
             'Hiring': 'bg-green-50 text-green-700 border-green-100',
         };
         return colors[type] || 'bg-gray-50 text-gray-600 border-gray-100';
@@ -47,7 +47,7 @@ const Messages = () => {
     return (
         <div className="max-w-6xl mx-auto h-[calc(100vh-6rem)] pb-4 px-4 md:px-0 flex gap-6 pt-4">
             {/* List */}
-            <div className="w-full md:w-80 lg:w-96 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col overflow-hidden">
+            <div className="w-full md:w-80 lg:w-96 bg-white rounded-2xl border border-blue-100 shadow-sm flex flex-col overflow-hidden">
                 <div className="p-4 border-b border-gray-100">
                     <h2 className="font-bold text-xl text-gray-900 mb-4">Messages</h2>
                     <div className="relative">
@@ -55,7 +55,7 @@ const Messages = () => {
                         <input
                             type="text"
                             placeholder="Search messages..."
-                            className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-900 focus:ring-0 text-sm transition-all"
+                            className="w-full pl-10 pr-4 py-2 rounded-xl border border-blue-100 bg-blue-50/50 focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm transition-all"
                         />
                     </div>
                 </div>
@@ -65,7 +65,7 @@ const Messages = () => {
                         <div
                             key={chat.id}
                             onClick={() => setActiveChat(chat.id)}
-                            className={`p-4 flex gap-3 cursor-pointer transition-colors border-b border-gray-50 ${activeChat === chat.id ? 'bg-blue-50/50' : 'hover:bg-gray-50'
+                            className={`p-4 flex gap-3 cursor-pointer transition-colors border-b border-blue-50 ${activeChat === chat.id ? 'bg-blue-100/60' : 'hover:bg-blue-50/50'
                                 }`}
                         >
                             <div className="relative flex-shrink-0">
@@ -93,7 +93,7 @@ const Messages = () => {
             </div>
 
             {/* Chat Area */}
-            <div className="hidden md:flex flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm flex-col overflow-hidden">
+            <div className="hidden md:flex flex-1 bg-white rounded-2xl border border-blue-100 shadow-sm flex-col overflow-hidden">
                 {/* Header */}
                 <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-white z-10">
                     <div className="flex items-center gap-3">
@@ -132,8 +132,8 @@ const Messages = () => {
                     {MESSAGES.map((msg, idx) => (
                         <div key={idx} className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
                             <div className={`max-w-[70%] rounded-2xl p-4 shadow-sm ${msg.sender === 'me'
-                                    ? 'bg-gray-900 text-white rounded-br-none'
-                                    : 'bg-white text-gray-800 border border-gray-100 rounded-bl-none'
+                                ? 'bg-blue-600 text-white rounded-br-none'
+                                : 'bg-white text-gray-800 border border-blue-100 rounded-bl-none'
                                 }`}>
                                 <p className="text-sm leading-relaxed">{msg.text}</p>
                                 <div className={`text-[10px] mt-1 text-right ${msg.sender === 'me' ? 'text-gray-400' : 'text-gray-400'}`}>
@@ -153,7 +153,7 @@ const Messages = () => {
                         <textarea
                             placeholder="Type a message..."
                             rows={1}
-                            className="flex-1 bg-gray-50 border-0 rounded-xl px-4 py-3 text-sm focus:ring-0 focus:bg-white focus:shadow-inner resize-none min-h-[46px] max-h-32"
+                            className="flex-1 bg-blue-50/50 border border-blue-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-400 focus:bg-white resize-none min-h-[46px] max-h-32"
                         />
                         <button className="p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-lg shadow-blue-200 transition-all hover:scale-105 active:scale-95">
                             <Send className="w-5 h-5 ml-0.5" />

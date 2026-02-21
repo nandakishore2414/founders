@@ -4,7 +4,7 @@ import PostCard from './PostCard';
 import BuildUpdateCard from './BuildUpdateCard';
 import { useData } from '../context/DataContext';
 const TOPICS = [
-    { label: 'AI & ML', color: 'bg-violet-500' },
+    { label: 'AI & ML', color: 'bg-blue-500' },
     { label: 'SaaS', color: 'bg-blue-500' },
     { label: 'Fundraising', color: 'bg-emerald-500' },
     { label: 'Web3', color: 'bg-orange-500' },
@@ -18,17 +18,15 @@ const ExploreTopicsButton = () => {
 
     return (
         <div className="flex items-center gap-2 flex-wrap">
-            {/* Main button */}
             <button
                 onClick={() => setOpen(o => !o)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm transition-all duration-300 shadow-sm ${open ? 'bg-gray-900 text-white' : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-400'
+                className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm transition-all duration-300 shadow-sm ${open ? 'bg-blue-600 text-white' : 'bg-white text-blue-700 border border-blue-200 hover:border-blue-400'
                     } hover:scale-105`}
             >
-                <Compass className={`w-4 h-4 transition-transform duration-300 ${open ? 'rotate-45 text-white' : 'text-violet-500'}`} />
+                <Compass className={`w-4 h-4 transition-transform duration-300 ${open ? 'rotate-45 text-white' : 'text-blue-500'}`} />
                 <span>Explore Topics</span>
             </button>
 
-            {/* Topic pills fan out to the right */}
             {TOPICS.map((topic, i) => (
                 <button
                     key={topic.label}
@@ -96,7 +94,7 @@ const Feed = () => {
     return (
         <div className="space-y-4 pb-10">
             {/* Updates (Stories) Section */}
-            <div className="bg-white border border-gray-300 rounded-lg p-4">
+            <div className="bg-white border border-blue-100 rounded-2xl p-4">
                 <h2 className="text-sm font-bold text-gray-900 mb-3 px-1">Updates</h2>
                 <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                     {/* Add Story */}
@@ -117,21 +115,23 @@ const Feed = () => {
                     {/* Stories */}
                     {UPDATES.map((update, index) => (
                         <div key={index} className="flex flex-col items-center gap-1 min-w-[60px] cursor-pointer group">
-                            <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-blue-500 to-purple-500">
+                            <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-blue-400 to-blue-600">
                                 <img
                                     src={update.image}
                                     alt={update.name}
                                     className="w-full h-full rounded-full border-2 border-white object-cover"
                                 />
                             </div>
-                            <span className="text-xs text-gray-600 group-hover:text-gray-900 truncate w-16 text-center">{update.name}</span>
+                            <span className="text-xs text-gray-600 group-hover:text-blue-600 truncate w-16 text-center">{update.name}</span>
                         </div>
                     ))}
                 </div>
             </div>
 
-            {/* Explore Topics */}
-            <ExploreTopicsButton />
+            {/* Updates panel — light blue card */}
+            <div className="bg-blue-50/60 border border-blue-100 rounded-2xl p-4">
+                <ExploreTopicsButton />
+            </div>
 
             {/* Filter Bar */}
             <div className="flex items-center justify-between px-1">
@@ -140,9 +140,9 @@ const Feed = () => {
                         <button
                             key={f}
                             onClick={() => setFilter(f)}
-                            className={`px-3 py-1.5 rounded-full font-medium transition-colors whitespace-nowrap ${filter === f
-                                ? 'bg-black text-white'
-                                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                            className={`px-3 py-1.5 rounded-full font-semibold transition-colors whitespace-nowrap text-xs ${filter === f
+                                ? 'bg-blue-600 text-white shadow-sm shadow-blue-200'
+                                : 'bg-white border border-blue-100 text-blue-700 hover:bg-blue-50'
                                 }`}
                         >
                             {f}
@@ -157,8 +157,8 @@ const Feed = () => {
             {/* Posts & Build Updates */}
             <div className="space-y-4">
                 {filteredItems.length === 0 ? (
-                    <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-                        <p className="text-gray-500">No posts yet. Be the first to share!</p>
+                    <div className="bg-blue-50 border border-blue-100 rounded-2xl p-8 text-center">
+                        <p className="text-blue-500 font-medium">No posts yet. Be the first to share!</p>
                     </div>
                 ) : (
                     filteredItems.map((item, index) => {

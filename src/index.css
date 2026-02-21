@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* App theme: blue-dominant */
+:root {
+  --theme-primary: 37 99 235;   /* blue-600 */
+  --theme-primary-light: 239 246 255; /* blue-50 */
+  --theme-primary-dark: 29 78 216;   /* blue-700 */
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;

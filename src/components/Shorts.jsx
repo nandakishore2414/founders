@@ -55,9 +55,8 @@ const Shorts = ({ onBack }) => {
   };
 
   return (
-    <div className="fixed top-0 left-16 right-0 bottom-0 flex justify-center items-center z-40 bg-[#F3F2EF]">
+    <div className="fixed top-0 left-16 right-0 bottom-0 flex justify-center items-center z-40" style={{ background: 'linear-gradient(160deg, #dbeafe 0%, #eff6ff 30%, #f8faff 60%, #e0ecfa 100%)' }}>
       <div className="relative w-full max-w-2xl h-full md:h-[calc(100%-2rem)] md:mt-4 md:mb-4 flex justify-center">
-        {/* Helper to block top gradient if needed, or just let content scroll */}
 
         <div
           ref={scrollContainerRef}
@@ -72,15 +71,17 @@ const Shorts = ({ onBack }) => {
         <div className="absolute -right-16 top-1/2 -translate-y-1/2 flex flex-col gap-4 hidden md:flex">
           <button
             onClick={() => handleScroll('up')}
-            className="p-3 bg-white rounded-full text-gray-400 hover:text-gray-900 hover:bg-gray-50 shadow-sm border border-gray-100 transition-all"
+            className="p-3 rounded-full shadow-md transition-all hover:scale-105 active:scale-95"
+            style={{ background: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(147, 197, 253, 0.5)' }}
           >
-            <ChevronUp className="w-6 h-6" />
+            <ChevronUp className="w-6 h-6 text-blue-500" />
           </button>
           <button
             onClick={() => handleScroll('down')}
-            className="p-3 bg-white rounded-full text-gray-400 hover:text-gray-900 hover:bg-gray-50 shadow-sm border border-gray-100 transition-all"
+            className="p-3 rounded-full shadow-md transition-all hover:scale-105 active:scale-95"
+            style={{ background: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(147, 197, 253, 0.5)' }}
           >
-            <ChevronDown className="w-6 h-6" />
+            <ChevronDown className="w-6 h-6 text-blue-500" />
           </button>
         </div>
       </div>
@@ -98,7 +99,7 @@ const ReelCard = ({ reel }) => {
 
   return (
     <div className="h-full w-full snap-start flex justify-center items-center p-4">
-      <div className="relative h-full aspect-[9/16] bg-black rounded-xl overflow-hidden shadow-lg border border-gray-200">
+      <div className="relative h-full aspect-[9/16] rounded-2xl overflow-hidden" style={{ border: '2px solid rgba(147, 197, 253, 0.4)', boxShadow: '0 8px 32px rgba(59, 130, 246, 0.12), 0 20px 40px -12px rgba(0, 0, 0, 0.1)' }}>
         {/* Video Content Layer */}
         <div className="absolute inset-0 cursor-pointer" onClick={togglePlay}>
           <img
@@ -106,12 +107,14 @@ const ReelCard = ({ reel }) => {
             alt={reel.caption}
             className="w-full h-full object-cover"
           />
-          {/* Gradient Overlay for Text Readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60 pointer-events-none" />
+          {/* Soft blue gradient overlay */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(59, 130, 246, 0.1) 0%, transparent 25%, transparent 55%, rgba(30, 64, 175, 0.45) 85%, rgba(30, 58, 138, 0.7) 100%)' }} />
 
           {!isPlaying && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
-              <Play className="w-16 h-16 text-white/80 fill-white/80" />
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ background: 'rgba(255, 255, 255, 0.15)' }}>
+              <div className="p-5 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(8px)', boxShadow: '0 4px 20px rgba(59, 130, 246, 0.25)' }}>
+                <Play className="w-14 h-14 text-blue-600 fill-blue-600" />
+              </div>
             </div>
           )}
         </div>
@@ -123,10 +126,11 @@ const ReelCard = ({ reel }) => {
               <img
                 src={reel.avatar}
                 alt={reel.user}
-                className="w-8 h-8 rounded-full border border-white/50 object-cover"
+                className="w-8 h-8 rounded-full object-cover"
+                style={{ border: '2px solid rgba(255, 255, 255, 0.8)' }}
               />
               <h3 className="font-bold text-white text-sm drop-shadow-md">{reel.user}</h3>
-              <button className="text-white text-xs font-semibold border border-white/40 px-2 py-0.5 rounded-full hover:bg-white/20 transition-colors">
+              <button className="text-xs font-semibold px-3 py-0.5 rounded-full transition-colors" style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#2563eb', border: '1px solid rgba(147, 197, 253, 0.6)' }}>
                 Follow
               </button>
             </div>
@@ -136,7 +140,7 @@ const ReelCard = ({ reel }) => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-full pointer-events-auto cursor-pointer hover:bg-white/30 transition-colors">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full pointer-events-auto cursor-pointer transition-all" style={{ background: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.3)' }}>
             <Music2 className="w-3 h-3 text-white" />
             <div className="overflow-hidden w-[100px]">
               <p className="text-xs text-white whitespace-nowrap animate-marquee">
@@ -149,38 +153,38 @@ const ReelCard = ({ reel }) => {
 
       {/* Right Side Actions Layer (Outside Video) */}
       <div className="flex flex-col items-center justify-end gap-6 ml-4 pb-4 h-full">
-        <div className="mt-auto flex flex-col gap-6">
+        <div className="mt-auto flex flex-col gap-5">
           <ActionItem
             icon={Heart}
             label={reel.likes}
             isActive={isLiked}
             activeColor="text-rose-500 fill-rose-500"
-            color="text-gray-800"
+            color="text-blue-500"
             onClick={() => setIsLiked(!isLiked)}
           />
           <ActionItem
             icon={MessageCircle}
             label={reel.comments}
-            color="text-gray-800"
+            color="text-blue-500"
           />
           <ActionItem
             icon={Send}
             label={reel.shares}
-            color="text-gray-800"
+            color="text-blue-500"
           />
           <ActionItem
             icon={Bookmark}
             isActive={isSaved}
-            activeColor="text-black fill-black"
-            color="text-gray-800"
+            activeColor="text-blue-600 fill-blue-600"
+            color="text-blue-500"
             onClick={() => setIsSaved(!isSaved)}
           />
           <ActionItem
             icon={MoreVertical}
-            color="text-gray-800"
+            color="text-blue-500"
           />
         </div>
-        <div className="w-10 h-10 rounded-lg border border-gray-200 overflow-hidden mt-2 bg-gray-100">
+        <div className="w-10 h-10 rounded-lg overflow-hidden mt-2" style={{ border: '2px solid rgba(147, 197, 253, 0.5)', background: 'white' }}>
           <img src={reel.avatar} className="w-full h-full object-cover" />
         </div>
       </div>
@@ -188,17 +192,17 @@ const ReelCard = ({ reel }) => {
   );
 };
 
-const ActionItem = ({ icon: Icon, label, isActive, activeColor, color = "text-white", onClick }) => {
+const ActionItem = ({ icon: Icon, label, isActive, activeColor, color = "text-blue-500", onClick }) => {
   return (
     <div className="flex flex-col items-center gap-1 cursor-pointer group" onClick={onClick}>
-      <div className={`p-2 rounded-full hover:bg-gray-200 transition-all transform group-hover:scale-110 active:scale-95`}>
+      <div className="p-2.5 rounded-full transition-all transform group-hover:scale-110 active:scale-95" style={{ background: 'rgba(255, 255, 255, 0.8)', border: '1px solid rgba(147, 197, 253, 0.35)', boxShadow: '0 2px 8px rgba(59, 130, 246, 0.08)' }}>
         <Icon
           className={`w-7 h-7 ${isActive ? activeColor : color}`}
           strokeWidth={1.5}
         />
       </div>
       {label && (
-        <span className="text-xs font-medium text-gray-500 text-center">
+        <span className="text-xs font-medium text-blue-600/70 text-center">
           {label}
         </span>
       )}

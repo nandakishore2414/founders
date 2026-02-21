@@ -62,12 +62,12 @@ const MastermindGroups = ({ hasRole }) => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 px-1">
                 <div>
                     <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                        <Crown className="w-5 h-5 text-indigo-600 fill-indigo-100" />
+                        <Crown className="w-5 h-5 text-blue-600 fill-blue-100" />
                         Mastermind Squads
                     </h2>
                     <p className="text-sm text-gray-500 mt-0.5">Exclusive, high-signal peer groups. Apply to join.</p>
                 </div>
-                <button className="px-4 py-2 bg-gray-900 text-white text-sm font-bold rounded-xl hover:bg-black transition-all shadow-sm flex items-center gap-2 self-start">
+                <button className="px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-all shadow-sm shadow-blue-200 flex items-center gap-2 self-start">
                     <Users className="w-4 h-4" /> Start a Squad
                 </button>
             </div>
@@ -85,10 +85,10 @@ const MastermindGroups = ({ hasRole }) => {
 const SquadCard = ({ name, members, maxMembers, industry, description, tags, avatars, nextMeeting, activity, theme, index }) => {
 
     const themeStyles = {
-        indigo: { bg: 'bg-indigo-50', border: 'border-indigo-100', text: 'text-indigo-900', accent: 'bg-indigo-600', lightAccent: 'bg-indigo-100 text-indigo-700' },
-        purple: { bg: 'bg-purple-50', border: 'border-purple-100', text: 'text-purple-900', accent: 'bg-purple-600', lightAccent: 'bg-purple-100 text-purple-700' },
-        emerald: { bg: 'bg-emerald-50', border: 'border-emerald-100', text: 'text-emerald-900', accent: 'bg-emerald-600', lightAccent: 'bg-emerald-100 text-emerald-700' },
-        amber: { bg: 'bg-amber-50', border: 'border-amber-100', text: 'text-amber-900', accent: 'bg-amber-600', lightAccent: 'bg-amber-100 text-amber-700' },
+        indigo: { bg: 'bg-blue-50', border: 'border-blue-100', text: 'text-blue-900', accent: 'bg-blue-600', lightAccent: 'bg-blue-100 text-blue-700' },
+        purple: { bg: 'bg-sky-50', border: 'border-sky-100', text: 'text-sky-900', accent: 'bg-sky-500', lightAccent: 'bg-sky-100 text-sky-700' },
+        emerald: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-900', accent: 'bg-blue-700', lightAccent: 'bg-blue-50 text-blue-800' },
+        amber: { bg: 'bg-blue-50', border: 'border-blue-100', text: 'text-blue-900', accent: 'bg-blue-500', lightAccent: 'bg-blue-100 text-blue-700' },
     };
 
     const style = themeStyles[theme] || themeStyles.indigo;

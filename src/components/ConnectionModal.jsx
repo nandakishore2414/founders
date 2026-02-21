@@ -80,7 +80,7 @@ const ConnectionModal = ({ isOpen, onClose, founderName, startupName, founderId,
                                             key={t.id}
                                             onClick={() => setType(t.id)}
                                             className={`p-3 rounded-xl border text-left transition-all ${type === t.id
-                                                    ? 'border-gray-900 bg-gray-900 text-white shadow-md'
+                                                    ? 'border-blue-600 bg-blue-600 text-white shadow-md'
                                                     : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50'
                                                 }`}
                                         >
@@ -100,7 +100,7 @@ const ConnectionModal = ({ isOpen, onClose, founderName, startupName, founderId,
                                     maxLength={300}
                                     rows={4}
                                     placeholder={`Hi ${founderName}, I'd love to discuss...`}
-                                    className="w-full rounded-xl border-gray-200 focus:border-gray-900 focus:ring-0 text-sm p-3 resize-none bg-gray-50 focus:bg-white transition-colors"
+                                    className="w-full rounded-xl border-gray-200 focus:border-blue-600 focus:ring-0 text-sm p-3 resize-none bg-gray-50 focus:bg-white transition-colors"
                                 />
                                 <div className="flex justify-between mt-1">
                                     <span className="text-[10px] text-gray-400">Be concise and relevant.</span>
@@ -119,7 +119,7 @@ const ConnectionModal = ({ isOpen, onClose, founderName, startupName, founderId,
                                     disabled={!type}
                                     onClick={handleSend}
                                     className={`px-6 py-2.5 text-sm font-bold text-white rounded-lg shadow-lg flex items-center gap-2 transition-all ${type
-                                            ? 'bg-gray-900 hover:bg-black transform hover:-translate-y-0.5'
+                                            ? 'bg-blue-600 hover:bg-blue-700 transform hover:-translate-y-0.5'
                                             : 'bg-gray-300 cursor-not-allowed'
                                         }`}
                                 >

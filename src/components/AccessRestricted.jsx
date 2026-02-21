@@ -18,7 +18,7 @@ const AccessRestricted = ({
                 {description}
             </p>
 
-            <button className="px-5 py-2.5 bg-gray-900 hover:bg-black text-white font-medium rounded-xl transition-all shadow-lg shadow-gray-200">
+            <button className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-all shadow-lg shadow-gray-200">
                 Upgrade to {role.charAt(0).toUpperCase() + role.slice(1)}
             </button>
         </div>

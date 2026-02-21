@@ -33,7 +33,7 @@ const CreatePost = ({ onCancel, user, currentUserId }) => {
                         key={format.id}
                         onClick={() => setSelectedFormat(format.id)}
                         className={`flex-shrink-0 w-32 p-3 rounded-xl border text-left transition-all group ${selectedFormat === format.id
-                                ? 'border-gray-900 bg-gray-900 text-white shadow-lg shadow-gray-200'
+                                ? 'border-blue-600 bg-blue-600 text-white shadow-lg shadow-blue-200'
                                 : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
                             }`}
                     >
@@ -87,7 +87,7 @@ const CreatePost = ({ onCancel, user, currentUserId }) => {
                         }}
                         disabled={isSubmitting}
                         className={`px-6 py-2.5 text-sm font-bold text-white rounded-lg shadow-lg shadow-gray-200 transition-all transform hover:-translate-y-0.5 ${
-                            isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-900 hover:bg-black'
+                            isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
                         }`}
                     >
                         {isSubmitting ? 'Publishing...' : `Publish ${selectedFormat}`}

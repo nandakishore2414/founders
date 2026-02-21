@@ -55,7 +55,7 @@ const InvestorDashboard = ({ hasRole }) => {
                     count="8"
                     trend="High compatability"
                     icon={Users}
-                    color="bg-purple-50 text-purple-600"
+                    color="bg-blue-50 text-blue-600"
                 />
             </div>
 

@@ -21,7 +21,7 @@ const BuildUpdateCard = ({
         switch (type) {
             case 'Feature Shipped': return { icon: CheckCircle2, bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-100' };
             case 'Milestone': return { icon: TrendingUp, bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-100' };
-            case 'Pivot': return { icon: ArrowRight, bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-100' };
+            case 'Pivot': return { icon: ArrowRight, bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-100' };
             case 'Failure': return { icon: XCircle, bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-100' };
             case 'Lesson': return { icon: Lightbulb, bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-100' };
             default: return { icon: CheckCircle2, bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-100' };
@@ -32,7 +32,7 @@ const BuildUpdateCard = ({
     const TypeIcon = style.icon;
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl border border-blue-100 shadow-sm p-5 hover:shadow-md hover:shadow-blue-50 transition-shadow">
             {/* Header: Startup name prominent so users know which company this is */}
             <div className="flex justify-between items-start mb-4">
                 <div className="flex gap-3">
@@ -101,7 +101,7 @@ const BuildUpdateCard = ({
                 </div>
 
                 <div className="flex gap-2">
-                    <button className="text-xs font-semibold text-gray-500 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors">
+                    <button className="text-xs font-semibold text-gray-500 hover:text-blue-600 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors">
                         Interested User
                     </button>
                     <button className="text-xs font-semibold text-gray-500 hover:text-green-600 px-3 py-1.5 rounded-lg hover:bg-green-50 transition-colors flex items-center gap-1">

@@ -42,7 +42,7 @@ const STARTUP = {
 const TRACTION_METRICS = [
     { label: 'Active Users', value: '2.5K', trend: '+24%', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50', borderColor: 'border-blue-100' },
     { label: 'MRR', value: '$4.2K', trend: '+18%', icon: DollarSign, color: 'text-green-600', bg: 'bg-green-50', borderColor: 'border-green-100' },
-    { label: 'MoM Growth', value: '24%', trend: 'High', icon: TrendingUp, color: 'text-purple-600', bg: 'bg-purple-50', borderColor: 'border-purple-100' },
+    { label: 'MoM Growth', value: '24%', trend: 'High', icon: TrendingUp, color: 'text-blue-600', bg: 'bg-blue-50', borderColor: 'border-blue-100' },
     { label: 'Reputation', value: '858', trend: 'Top 5%', icon: Star, color: 'text-amber-600', bg: 'bg-amber-50', borderColor: 'border-amber-100' },
 ];
 
@@ -82,9 +82,9 @@ const BUILD_TIMELINE = [
 
 const PITCH_HIGHLIGHTS = [
     { id: 1, title: 'Problem', emoji: '🎯', content: 'Founders juggle 50 browser tabs across fragmented tools', color: 'from-red-400 to-orange-500' },
-    { id: 2, title: 'Solution', emoji: '💡', content: 'A unified platform where founders build, share, and connect', color: 'from-blue-400 to-indigo-500' },
+    { id: 2, title: 'Solution', emoji: '💡', content: 'A unified platform where founders build, share, and connect', color: 'from-blue-400 to-blue-500' },
     { id: 3, title: 'Traction', emoji: '📈', content: '2.5K users, $4.2K MRR, 24% MoM growth', color: 'from-green-400 to-teal-500' },
-    { id: 4, title: 'Vision', emoji: '🚀', content: 'The LinkedIn for founders — but better', color: 'from-purple-400 to-pink-500' },
+    { id: 4, title: 'Vision', emoji: '🚀', content: 'The LinkedIn for founders — but better', color: 'from-blue-500 to-blue-600' },
 ];
 
 const TEAM_MEMBERS = [
@@ -181,7 +181,7 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
             return [
                 { label: 'Active Users', value: currentFounder.users || '—', trend: '—', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50', borderColor: 'border-blue-100' },
                 { label: 'MRR', value: currentFounder.mrr || '—', trend: '—', icon: DollarSign, color: 'text-green-600', bg: 'bg-green-50', borderColor: 'border-green-100' },
-                { label: 'Build Streak', value: `${currentFounder.streak || 0}d`, trend: 'Active', icon: TrendingUp, color: 'text-purple-600', bg: 'bg-purple-50', borderColor: 'border-purple-100' },
+                { label: 'Build Streak', value: `${currentFounder.streak || 0}d`, trend: 'Active', icon: TrendingUp, color: 'text-blue-600', bg: 'bg-blue-50', borderColor: 'border-blue-100' },
                 { label: 'Reputation', value: String(currentFounder.reputation || 0), trend: '—', icon: Star, color: 'text-amber-600', bg: 'bg-amber-50', borderColor: 'border-amber-100' },
             ];
         }
@@ -196,7 +196,7 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
 
             {/* ── Cover Banner ── */}
             <div className="relative h-44 md:h-52 rounded-b-3xl overflow-hidden group">
-                <div className={`absolute inset-0 bg-gradient-to-br ${isFounderMode ? 'from-slate-900 via-indigo-900 to-purple-900' : 'from-slate-900 via-emerald-900 to-teal-900'} transition-colors duration-500`}></div>
+                <div className={`absolute inset-0 bg-gradient-to-br ${isFounderMode ? 'from-slate-900 via-blue-900 to-blue-800' : 'from-slate-900 via-emerald-900 to-teal-900'} transition-colors duration-500`}></div>
                 <div className="absolute inset-0 opacity-20" style={{
                     backgroundImage: 'radial-gradient(circle at 25% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%), radial-gradient(circle at 75% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%)'
                 }}></div>
@@ -219,7 +219,7 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
                 <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-6">
                     {/* Avatar */}
                     <div className="relative self-center md:self-auto">
-                        <div className={`w-28 h-28 rounded-2xl p-[3px] bg-gradient-to-br ${isFounderMode ? 'from-indigo-500 via-purple-500 to-pink-500 shadow-indigo-500/20' : 'from-emerald-500 via-teal-500 to-cyan-500 shadow-emerald-500/20'} shadow-xl avatar-ring-glow transition-all duration-500`}>
+                        <div className={`w-28 h-28 rounded-2xl p-[3px] bg-gradient-to-br ${isFounderMode ? 'from-blue-500 via-blue-600 to-blue-700 shadow-blue-500/20' : 'from-emerald-500 via-teal-500 to-cyan-500 shadow-emerald-500/20'} shadow-xl avatar-ring-glow transition-all duration-500`}>
                             <div className="w-full h-full rounded-[13px] bg-white p-[2px]">
                                 <img src={safeUser.avatar} alt={safeUser.name} className="w-full h-full rounded-xl object-cover bg-gray-100" />
                             </div>
@@ -241,7 +241,7 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
                                     </span>
                                 ))}
                                 {activeMode === 'investor' && (
-                                    <span className="px-2 py-0.5 text-[10px] font-bold rounded-md border bg-purple-50 text-purple-600 border-purple-100">
+                                    <span className="px-2 py-0.5 text-[10px] font-bold rounded-md border bg-blue-50 text-blue-600 border-blue-100">
                                         Investor
                                     </span>
                                 )}
@@ -259,7 +259,7 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
                                     <div className="flex bg-gray-100 rounded-lg p-1 mr-2">
                                         <button
                                             onClick={() => switchMode('founder')}
-                                            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${activeMode === 'founder' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
+                                            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${activeMode === 'founder' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
                                         >
                                             Founder
                                         </button>
@@ -272,7 +272,7 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
                                     </div>
                                 )}
 
-                                <button className="flex items-center gap-2 px-5 py-2 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-all hover:shadow-lg">
+                                <button className="flex items-center gap-2 px-5 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-all hover:shadow-lg">
                                     <Edit3 className="w-4 h-4" />
                                     Edit
                                 </button>
@@ -282,7 +282,7 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
                             </div>
                         ) : (
                             <>
-                                <button className="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 transition-all">
+                                <button className="flex items-center gap-2 px-5 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-600/20 transition-all">
                                     <UserPlus className="w-4 h-4" /> Connect
                                 </button>
                                 <button className="p-2 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
@@ -298,7 +298,7 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
                     <p className="text-sm text-gray-700 leading-relaxed">{safeUser.bio}</p>
                     <div className="flex flex-wrap items-center gap-3 mt-2.5 text-xs text-gray-500">
                         <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{safeUser.location}</span>
-                        <span className="flex items-center gap-1 text-indigo-600 hover:underline cursor-pointer"><Globe className="w-3.5 h-3.5" />{safeUser.website}</span>
+                        <span className="flex items-center gap-1 text-blue-600 hover:underline cursor-pointer"><Globe className="w-3.5 h-3.5" />{safeUser.website}</span>
                         <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />Joined {safeUser.joinedDate}</span>
                         {isFounderMode && (
                             <span className="flex items-center gap-1"><Flame className="w-3.5 h-3.5 text-orange-500" />{reputationData.buildStreak} day build streak</span>
@@ -311,7 +311,7 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
                     <div className="mt-5 bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
                         <div className="flex flex-col md:flex-row md:items-center gap-4">
                             <div className="flex items-center gap-4 flex-1">
-                                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white text-lg font-bold shadow-md shadow-indigo-200 shrink-0">
+                                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white text-lg font-bold shadow-md shadow-blue-200 shrink-0">
                                     {startupData.name.slice(0, 2).toUpperCase()}
                                 </div>
                                 <div className="min-w-0">
@@ -333,7 +333,7 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-100">
+                                <span className="px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg border border-blue-100">
                                     {startupData.fundingRound} · {startupData.fundingRaised}
                                 </span>
                                 {startupData.hiring && (
@@ -357,7 +357,7 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
                                         <span className="text-[10px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded-md">{metric.trend}</span>
                                     )}
                                 </div>
-                                <div className="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">{metric.value}</div>
+                                <div className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{metric.value}</div>
                                 <div className="text-[11px] font-medium text-gray-500">{metric.label}</div>
                             </div>
                         ))}
@@ -367,9 +367,9 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
                 {/* ── Investor Stats (Investor Mode) ── */}
                 {!isFounderMode && (
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
-                        <div className="bg-purple-50 border border-purple-100 rounded-xl p-3.5">
+                        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3.5">
                             <div className="flex items-center justify-between mb-1.5">
-                                <Building2 className="w-4 h-4 text-purple-600" />
+                                <Building2 className="w-4 h-4 text-blue-600" />
                             </div>
                             <div className="text-xl font-bold text-gray-900">12</div>
                             <div className="text-[11px] font-medium text-gray-500">Portfolio Co.</div>
@@ -408,8 +408,8 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
                         </div>
                     </div>
                     <div className="flex items-center gap-1.5">
-                        <Shield className="w-4 h-4 text-indigo-500" />
-                        <span className="text-[10px] font-bold text-indigo-600 whitespace-nowrap">Verified Founder</span>
+                        <Shield className="w-4 h-4 text-blue-500" />
+                        <span className="text-[10px] font-bold text-blue-600 whitespace-nowrap">Verified Founder</span>
                     </div>
                 </div>
 
@@ -428,8 +428,8 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
                         ))}
                         {isOwnProfile && (
                             <div className="flex flex-col items-center gap-1.5 cursor-pointer group flex-shrink-0">
-                                <div className="w-[68px] h-[68px] rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center group-hover:border-indigo-400 transition-colors">
-                                    <span className="text-xl text-gray-400 group-hover:text-indigo-500">+</span>
+                                <div className="w-[68px] h-[68px] rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center group-hover:border-blue-400 transition-colors">
+                                    <span className="text-xl text-gray-400 group-hover:text-blue-500">+</span>
                                 </div>
                                 <span className="text-[11px] font-medium text-gray-400">Add</span>
                             </div>
@@ -484,10 +484,10 @@ const OverviewTab = ({ isFounderMode, buildUpdates, startupData, reputation }) =
             {isFounderMode && (
                 <div className="bg-white rounded-2xl border border-gray-100 p-5">
                     <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4 flex items-center gap-2">
-                        <Target className="w-4 h-4 text-indigo-600" />
+                        <Target className="w-4 h-4 text-blue-600" />
                         Founder's Vision
                     </h3>
-                    <blockquote className="text-gray-600 text-sm italic pl-4 border-l-2 border-indigo-200 leading-relaxed">
+                    <blockquote className="text-gray-600 text-sm italic pl-4 border-l-2 border-blue-200 leading-relaxed">
                         "We built FounderPlatform because the fragmentation of startup tools was killing our own productivity. Founders need a unified cockpit, not 50 browser tabs."
                     </blockquote>
 
@@ -497,8 +497,8 @@ const OverviewTab = ({ isFounderMode, buildUpdates, startupData, reputation }) =
                             <span className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">On Track</span>
                         </div>
                         <div className="h-20 w-full bg-gray-50 rounded-xl border border-gray-100 relative overflow-hidden">
-                            <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-indigo-50 to-transparent"></div>
-                            <svg className="w-full h-full text-indigo-500 opacity-20" viewBox="0 0 100 24" preserveAspectRatio="none">
+                            <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-blue-50 to-transparent"></div>
+                            <svg className="w-full h-full text-blue-500 opacity-20" viewBox="0 0 100 24" preserveAspectRatio="none">
                                 <path d="M0,24 Q25,5 50,15 T100,0 V24 H0 Z" fill="currentColor" />
                             </svg>
                             <span className="absolute inset-0 flex items-center justify-center text-[11px] text-gray-400 font-medium">Q3 - Q4 Performance</span>
@@ -545,12 +545,12 @@ const OverviewTab = ({ isFounderMode, buildUpdates, startupData, reputation }) =
                                 <span className="text-xl mt-0.5">🚀</span>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2">
-                                        <h4 className="text-sm font-bold text-gray-900 group-hover:text-indigo-600 transition-colors truncate">{item.headline}</h4>
+                                        <h4 className="text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors truncate">{item.headline}</h4>
                                         <span className="text-[10px] text-gray-400 whitespace-nowrap">{item.time}</span>
                                     </div>
                                     <p className="text-xs text-gray-500 mt-0.5 truncate">{item.outcome}</p>
                                 </div>
-                                <ArrowUpRight className="w-4 h-4 text-gray-300 group-hover:text-indigo-500 transition-colors shrink-0 mt-1" />
+                                <ArrowUpRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 transition-colors shrink-0 mt-1" />
                             </div>
                         ))}
                     </div>
@@ -563,10 +563,10 @@ const OverviewTab = ({ isFounderMode, buildUpdates, startupData, reputation }) =
             {/* Quick Connect */}
             <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-3">
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Quick Actions</h3>
-                <button className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-indigo-100 flex items-center justify-center gap-2 text-sm">
+                <button className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-blue-100 flex items-center justify-center gap-2 text-sm">
                     <ExternalLink className="w-4 h-4" /> Visit Website
                 </button>
-                <button className="w-full py-2.5 px-4 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-xl transition-all shadow-md shadow-gray-200 flex items-center justify-center gap-2 text-sm">
+                <button className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-blue-200 flex items-center justify-center gap-2 text-sm">
                     <Play className="w-4 h-4" /> Watch Pitch
                 </button>
                 <button className="w-full py-2.5 px-4 border-2 border-gray-200 hover:border-gray-900 text-gray-700 hover:text-gray-900 font-semibold rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
@@ -682,10 +682,10 @@ const TeamTab = ({ startupData }) => (
                 <div key={i} className="flex items-center gap-4 bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-shadow cursor-pointer group profile-grid-item" style={{ animationDelay: `${i * 80}ms` }}>
                     <img src={member.avatar} alt={member.name} className="w-12 h-12 rounded-xl bg-gray-100 border border-gray-100 group-hover:scale-105 transition-transform" />
                     <div className="flex-1">
-                        <h4 className="text-sm font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">{member.name}</h4>
+                        <h4 className="text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{member.name}</h4>
                         <p className="text-xs text-gray-500">{member.role}</p>
                     </div>
-                    <button className="px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
+                    <button className="px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                         View
                     </button>
                 </div>
@@ -694,12 +694,12 @@ const TeamTab = ({ startupData }) => (
 
         {/* Hiring CTA */}
         {startupData.hiring && (
-            <div className="mt-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100 p-6 text-center">
+            <div className="mt-6 bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl border border-blue-100 p-6 text-center">
                 <h3 className="text-base font-bold text-gray-900 mb-1">Join our mission</h3>
                 <p className="text-sm text-gray-500 mb-4">We're looking for passionate people to build the future of founder networking.</p>
                 <div className="flex flex-wrap gap-2 justify-center">
                     {startupData.openRoles.map((role, i) => (
-                        <button key={i} className="px-4 py-2 bg-white text-sm font-semibold text-indigo-600 rounded-xl border border-indigo-100 hover:shadow-md transition-all flex items-center gap-1.5">
+                        <button key={i} className="px-4 py-2 bg-white text-sm font-semibold text-blue-600 rounded-xl border border-blue-100 hover:shadow-md transition-all flex items-center gap-1.5">
                             {role} <ArrowUpRight className="w-3.5 h-3.5" />
                         </button>
                     ))}

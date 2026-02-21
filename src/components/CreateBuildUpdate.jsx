@@ -25,7 +25,7 @@ const CreateBuildUpdate = ({ onCancel, hasRole, user, currentUserId }) => {
     const types = [
         { id: 'Feature Shipped', icon: CheckCircle2, color: 'text-green-600', bg: 'bg-green-50' },
         { id: 'Milestone', icon: TrendingUp, color: 'text-blue-600', bg: 'bg-blue-50' },
-        { id: 'Pivot', icon: ArrowRight, color: 'text-purple-600', bg: 'bg-purple-50' },
+        { id: 'Pivot', icon: ArrowRight, color: 'text-blue-600', bg: 'bg-blue-50' },
         { id: 'Failure', icon: XCircle, color: 'text-red-600', bg: 'bg-red-50' },
         { id: 'Revenue', icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
         { id: 'Insight', icon: Lightbulb, color: 'text-amber-600', bg: 'bg-amber-50' },
@@ -171,7 +171,7 @@ const CreateBuildUpdate = ({ onCancel, hasRole, user, currentUserId }) => {
                         className={`px-6 py-2.5 text-sm font-bold text-white rounded-lg shadow-lg shadow-gray-200 transition-all transform hover:-translate-y-0.5 ${
                             isSubmitting || !headline.trim() || !whatWeDid.trim()
                                 ? 'bg-gray-400 cursor-not-allowed'
-                                : 'bg-gray-900 hover:bg-black'
+                                : 'bg-blue-600 hover:bg-blue-700'
                         }`}
                     >
                         {isSubmitting ? 'Publishing...' : 'Publish Update'}

@@ -17,10 +17,10 @@ const PostCard = ({
             'Video': { icon: Video, color: 'text-blue-600', bg: 'bg-blue-50' },
             'Thread': { icon: FileText, color: 'text-gray-600', bg: 'bg-gray-100' },
             'Case Study': { icon: TrendingUp, color: 'text-green-600', bg: 'bg-green-50' },
-            'Demo': { icon: Play, color: 'text-purple-600', bg: 'bg-purple-50' },
+            'Demo': { icon: Play, color: 'text-blue-700', bg: 'bg-blue-50' },
             'Milestone': { icon: CheckCircle2, color: 'text-orange-600', bg: 'bg-orange-50' },
             'AMA': { icon: HelpCircle, color: 'text-pink-600', bg: 'bg-pink-50' },
-            'Hiring': { icon: Briefcase, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+            'Hiring': { icon: Briefcase, color: 'text-blue-600', bg: 'bg-blue-50' },
             'Poll': { icon: BarChart2, color: 'text-cyan-600', bg: 'bg-cyan-50' },
         };
         const style = styles[type] || styles['Thread'];
@@ -94,19 +94,19 @@ const PostCard = ({
                 );
             case 'Hiring':
                 return (
-                    <div className="border border-indigo-100 rounded-xl p-4 bg-indigo-50/30">
+                    <div className="border border-blue-100 rounded-xl p-4 bg-blue-50/40">
                         <div className="flex justify-between items-start mb-2">
                             <div>
                                 <h3 className="text-lg font-bold text-gray-900">{content.role}</h3>
                                 <div className="text-sm text-gray-500 font-medium">{content.location} • {content.salary}</div>
                             </div>
-                            <button className="px-4 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-full hover:bg-indigo-700 transition-colors">
+                            <button className="px-4 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-full hover:bg-blue-700 transition-colors">
                                 Apply Now
                             </button>
                         </div>
                         <div className="flex flex-wrap gap-2 mt-3">
                             {content.skills.map((skill, idx) => (
-                                <span key={idx} className="px-2 py-0.5 bg-white border border-indigo-100 text-indigo-600 text-xs rounded-md font-medium">
+                                <span key={idx} className="px-2 py-0.5 bg-white border border-blue-100 text-blue-600 text-xs rounded-md font-medium">
                                     {skill}
                                 </span>
                             ))}
@@ -137,7 +137,7 @@ const PostCard = ({
     };
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl border border-blue-100 shadow-sm p-5 hover:shadow-md hover:shadow-blue-50 transition-shadow">
             {/* Header */}
             <div className="flex justify-between items-start mb-4">
                 <div className="flex gap-3">
@@ -171,7 +171,7 @@ const PostCard = ({
                     <ActionButton icon={MessageSquare} label="Discuss" count={engagement.comments} />
                 </div>
                 <div className="flex gap-2">
-                    <button className="text-xs font-semibold text-gray-500 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors">
+                    <button className="text-xs font-semibold text-gray-500 hover:text-blue-600 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors">
                         Interested
                     </button>
                 </div>

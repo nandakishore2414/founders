@@ -10,7 +10,7 @@ const RightSidebar = () => {
     return (
         <div className="space-y-4">
             {/* Profile Card */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-blue-100 overflow-hidden">
                 {/* Content */}
                 <div className="px-4 pt-4 pb-3">
                     {/* Avatar + role row */}
@@ -51,7 +51,7 @@ const RightSidebar = () => {
             </div>
 
             {/* Upcoming Events Card */}
-            <div className="bg-white rounded-xl border border-gray-200 p-4">
+            <div className="bg-white rounded-xl border border-blue-100 p-4">
                 <div className="flex items-center gap-2 mb-4">
                     <Calendar className="w-4 h-4 text-blue-600" />
                     <h3 className="text-sm font-bold text-gray-900 uppercase tracking-tight">Upcoming Events</h3>
@@ -67,7 +67,7 @@ const RightSidebar = () => {
                         </div>
                     ))}
                 </div>
-                <button className="mt-4 w-full py-2 text-[10px] font-bold text-gray-500 bg-gray-50 hover:bg-gray-100 border border-gray-100 rounded-lg transition-colors">
+                <button className="mt-4 w-full py-2 text-[10px] font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-100 rounded-lg transition-colors">
                     Explore all events
                 </button>
             </div>

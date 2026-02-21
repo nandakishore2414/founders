@@ -43,7 +43,7 @@ const FounderIdentity = ({ activeMode, hasRole, user }) => {
                 <div className="absolute top-0 right-0 p-4 bg-gradient-to-l from-blue-50 to-transparent w-48 h-full opacity-50 pointer-events-none"></div>
 
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-6 relative z-10">
-                    <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-blue-200 shrink-0">
+                    <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-blue-200 shrink-0">
                         FP
                     </div>
 
@@ -92,7 +92,7 @@ const FounderIdentity = ({ activeMode, hasRole, user }) => {
                     </div>
                     <div className="hidden md:flex items-center gap-2">
                         <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg border border-blue-100">Verified Founder</span>
-                        <span className="px-2 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-lg border border-purple-100">Y-Combinator</span>
+                        <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg border border-blue-100">Y-Combinator</span>
                     </div>
                 </div>
             )}
@@ -129,7 +129,7 @@ const FounderIdentity = ({ activeMode, hasRole, user }) => {
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                             <StatCard label="Active Users" value="12.5k" trend="+18%" icon={Users} color="text-blue-600" bg="bg-blue-50" />
                             <StatCard label="MRR" value="$42k" trend="+8%" icon={DollarSign} color="text-green-600" bg="bg-green-50" />
-                            <StatCard label="MoM Growth" value="24%" trend="High" icon={TrendingUp} color="text-purple-600" bg="bg-purple-50" />
+                            <StatCard label="MoM Growth" value="24%" trend="High" icon={TrendingUp} color="text-blue-600" bg="bg-blue-50" />
                             <StatCard label="Team Size" value="8" trend="Hiring" icon={Briefcase} color="text-orange-600" bg="bg-orange-50" />
                         </div>
                     )}
@@ -152,7 +152,7 @@ const FounderIdentity = ({ activeMode, hasRole, user }) => {
                                         <h3 className="text-lg font-bold text-gray-900">{profileName}</h3>
                                         <p className="text-sm text-gray-500 font-medium mb-3">Ex-Stripe PM • {profileRole}</p>
 
-                                        <blockquote className="relative text-gray-600 text-sm italic pl-4 border-l-2 border-indigo-200 leading-relaxed">
+                                        <blockquote className="relative text-gray-600 text-sm italic pl-4 border-l-2 border-blue-200 leading-relaxed">
                                             "We built FounderPlatform because the fragmentation of startup tools was killing our own productivity. Founders need a unified cockpit, not 50 browser tabs."
                                         </blockquote>
                                     </div>
@@ -165,8 +165,8 @@ const FounderIdentity = ({ activeMode, hasRole, user }) => {
                                         <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">On Track</span>
                                     </div>
                                     <div className="h-24 w-full bg-gray-50 rounded-lg border border-gray-100 dashed-border flex items-center justify-center relative overflow-hidden group">
-                                        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-indigo-50 to-transparent"></div>
-                                        <svg className="w-full h-full text-indigo-500 opacity-20" viewBox="0 0 100 24" preserveAspectRatio="none">
+                                        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-blue-50 to-transparent"></div>
+                                        <svg className="w-full h-full text-blue-500 opacity-20" viewBox="0 0 100 24" preserveAspectRatio="none">
                                             <path d="M0,24 Q25,5 50,15 T100,0 V24 H0 Z" fill="currentColor" />
                                         </svg>
                                         <span className="text-xs text-gray-400 font-medium relative z-10">Q3 - Q4 Performance</span>
@@ -182,7 +182,7 @@ const FounderIdentity = ({ activeMode, hasRole, user }) => {
 
                                 {activeMode === 'investor' ? (
                                     <>
-                                        <button className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-purple-100 flex items-center justify-center gap-2">
+                                        <button className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-blue-100 flex items-center justify-center gap-2">
                                             <DollarSign className="w-4 h-4" /> Express Interest
                                         </button>
                                         <button className="w-full py-3 px-4 border-2 border-gray-200 hover:border-gray-900 text-gray-700 hover:text-gray-900 font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
@@ -198,7 +198,7 @@ const FounderIdentity = ({ activeMode, hasRole, user }) => {
                                             Visit Website <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                                         </button>
 
-                                        <button className="w-full py-3 px-4 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-xl transition-all shadow-md shadow-gray-200 flex items-center justify-center gap-2">
+                                        <button className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-blue-200 flex items-center justify-center gap-2">
                                             Request Demo
                                         </button>
 

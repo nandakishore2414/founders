@@ -23,7 +23,7 @@ const Header = ({ currentView, onNavigate, user, activeMode, hasRole, switchMode
                         className="flex items-center gap-2 cursor-pointer group"
                         onClick={() => onNavigate(layout === 'investor' ? 'investor-dashboard' : 'home')}
                     >
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:shadow-md transition-all">
+                        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:shadow-md transition-all">
                             FP
                         </div>
                         <span className="text-lg font-bold text-gray-900 tracking-tight hidden md:block group-hover:text-blue-600 transition-colors">
