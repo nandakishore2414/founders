@@ -149,6 +149,9 @@ export const DataProvider = ({ children, currentUserId }) => {
     const [posts, setPosts] = useState([]);
     const [buildUpdates, setBuildUpdates] = useState([]);
     const [connections, setConnections] = useState([]); // { fromId, toId, type, message, status, timestamp }
+    const [projects, setProjects] = useState([]); // { id, creatorId, title, description, industry, stage, lookingFor, tags, timestamp, likes, comments, views }
+    const [communityPosts, setCommunityPosts] = useState([]); // { id, authorId, type: 'ask' | 'offer', title, description, category, tags, timestamp, responses, helpful }
+    const [freelancingListings, setFreelancingListings] = useState([]); // { id, creatorId, type: 'job' | 'service', title, description, category, budget, skills, timestamp, applications, status }
 
     // Get current user's founder profile
     const currentFounder = useMemo(() => {
@@ -296,11 +299,70 @@ export const DataProvider = ({ children, currentUserId }) => {
         return results;
     }, [founders]);
 
+    // Add a project/idea
+    const addProject = useCallback((projectData) => {
+        const newProject = {
+            id: `project-${Date.now()}`,
+            ...projectData,
+            timestamp: Date.now(),
+            likes: 0,
+            comments: [],
+            views: 0,
+            status: 'active'
+        };
+        setProjects(prev => [newProject, ...prev]);
+        return newProject.id;
+    }, []);
+
+    // Add a community help post
+    const addCommunityPost = useCallback((postData) => {
+        const newPost = {
+            id: `community-${Date.now()}`,
+            ...postData,
+            timestamp: Date.now(),
+            responses: [],
+            helpful: 0
+        };
+        setCommunityPosts(prev => [newPost, ...prev]);
+        return newPost.id;
+    }, []);
+
+    // Add a freelancing listing (job or service)
+    const addFreelancingListing = useCallback((listingData) => {
+        const newListing = {
+            id: `freelance-${Date.now()}`,
+            ...listingData,
+            timestamp: Date.now(),
+            applications: [],
+            status: 'open'
+        };
+        setFreelancingListings(prev => [newListing, ...prev]);
+        return newListing.id;
+    }, []);
+
+    // Get projects by creator
+    const getProjectsByCreator = useCallback((creatorId) => {
+        return projects.filter(p => p.creatorId === creatorId);
+    }, [projects]);
+
+    // Get community posts by author
+    const getCommunityPostsByAuthor = useCallback((authorId) => {
+        return communityPosts.filter(p => p.authorId === authorId);
+    }, [communityPosts]);
+
+    // Get freelancing listings by creator
+    const getFreelancingListingsByCreator = useCallback((creatorId) => {
+        return freelancingListings.filter(l => l.creatorId === creatorId);
+    }, [freelancingListings]);
+
     const value = {
         founders,
         posts,
         buildUpdates,
         connections,
+        projects,
+        communityPosts,
+        freelancingListings,
         currentFounder,
         updateFounderProfile,
         addFounder,
@@ -310,7 +372,13 @@ export const DataProvider = ({ children, currentUserId }) => {
         getPostsByFounder,
         getBuildUpdatesByFounder,
         getFeedItems,
-        searchFounders
+        searchFounders,
+        addProject,
+        addCommunityPost,
+        addFreelancingListing,
+        getProjectsByCreator,
+        getCommunityPostsByAuthor,
+        getFreelancingListingsByCreator
     };
 
     return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

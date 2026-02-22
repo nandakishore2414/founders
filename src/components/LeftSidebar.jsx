@@ -1,11 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
     Zap, Rocket, PenSquare, Flame, Star,
-    UserPlus, ChevronRight, Activity, Users
+    UserPlus, ChevronRight, Activity, Users, Sparkles, HandHeart, Code, Trophy
 } from 'lucide-react';
 import { useData } from '../context/DataContext';
 
-const LeftSidebar = ({ currentView, onNavigate }) => {
+const LeftSidebar = () => {
     const { currentFounder, getBuildUpdatesByFounder, connections } = useData();
 
     // Derived state
@@ -17,7 +18,7 @@ const LeftSidebar = ({ currentView, onNavigate }) => {
     const formattedScore = currentFounder?.reputation ? currentFounder.reputation.toLocaleString() : '0';
 
     return (
-        <div className="py-4 sticky top-20 flex flex-col gap-5 items-stretch pr-2 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-thin">
+        <div className="py-4 sticky top-20 flex flex-col gap-5 items-stretch pr-2 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-thin" role="complementary" aria-label="Sidebar navigation">
 
             {/* Quick Actions */}
             <div className="bg-white rounded-xl border border-blue-100 overflow-hidden">
@@ -26,25 +27,84 @@ const LeftSidebar = ({ currentView, onNavigate }) => {
                     <h3 className="text-xs font-bold text-gray-900 uppercase tracking-tight">Quick Actions</h3>
                 </div>
                 <div className="p-2 space-y-1">
-                    <button
-                        onClick={() => onNavigate('create-update')}
+                    <Link
+                        to="/create-update"
                         className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50/60 transition-colors group text-left"
                     >
                         <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
                             <Rocket className="w-4 h-4 text-blue-600" />
                         </div>
                         <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-700">Share Build Update</span>
-                    </button>
+                    </Link>
 
-                    <button
-                        onClick={() => onNavigate('create-post')}
+                    <Link
+                        to="/create-post"
                         className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50/60 transition-colors group text-left"
                     >
                         <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
                             <PenSquare className="w-4 h-4 text-blue-600" />
                         </div>
                         <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-700">Create Post</span>
-                    </button>
+                    </Link>
+
+                    <Link
+                        to="/create-project"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50/60 transition-colors group text-left"
+                    >
+                        <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                            <Sparkles className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-700">Create Project</span>
+                    </Link>
+                </div>
+            </div>
+
+            {/* Quick Links */}
+            <div className="bg-white rounded-xl border border-blue-100 overflow-hidden">
+                <div className="flex items-center gap-2 px-4 py-3 border-b border-blue-50">
+                    <Users className="w-4 h-4 text-blue-600" />
+                    <h3 className="text-xs font-bold text-gray-900 uppercase tracking-tight">Explore</h3>
+                </div>
+                <div className="p-2 space-y-1">
+                    <Link
+                        to="/projects"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50/60 transition-colors group text-left"
+                    >
+                        <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                            <Rocket className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-700">Projects & Ideas</span>
+                    </Link>
+
+                    <Link
+                        to="/community"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50/60 transition-colors group text-left"
+                    >
+                        <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                            <HandHeart className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-700">Community Help</span>
+                    </Link>
+
+                    <Link
+                        to="/freelance"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50/60 transition-colors group text-left"
+                    >
+                        <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                            <Code className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-700">Freelancing</span>
+                    </Link>
+
+                    <Link
+                        to="/gamification"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50/60 transition-colors group text-left"
+                    >
+                        <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                            <Trophy className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-700">Rank & Levels</span>
+                    </Link>
                 </div>
             </div>
 
@@ -89,12 +149,12 @@ const LeftSidebar = ({ currentView, onNavigate }) => {
                     </div>
                 </div>
                 <div className="px-4 py-2 bg-blue-50/50 border-t border-blue-50">
-                    <button
-                        onClick={() => onNavigate('profile')}
-                        className="text-[10px] font-bold text-blue-600 hover:text-blue-700 transition-colors w-full text-center py-1"
+                    <Link
+                        to="/profile"
+                        className="text-[10px] font-bold text-blue-600 hover:text-blue-700 transition-colors w-full text-center py-1 block"
                     >
                         View full profile stats
-                    </button>
+                    </Link>
                 </div>
             </div>
 
@@ -128,23 +188,23 @@ const LeftSidebar = ({ currentView, onNavigate }) => {
                             <UserPlus className="w-5 h-5 text-blue-400" />
                         </div>
                         <p className="text-xs text-gray-500 mb-3">No pending requests</p>
-                        <button
-                            onClick={() => onNavigate('network')}
+                        <Link
+                            to="/network"
                             className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline"
                         >
                             Find founders
-                        </button>
+                        </Link>
                     </div>
                 )}
 
                 {pendingConnections.length > 0 && (
                     <div className="px-4 py-2 bg-blue-50/50 border-t border-blue-50">
-                        <button
-                            onClick={() => onNavigate('network')}
-                            className="text-[10px] font-bold text-blue-600 hover:text-blue-700 transition-colors w-full text-center py-1"
+                        <Link
+                            to="/network"
+                            className="text-[10px] font-bold text-blue-600 hover:text-blue-700 transition-colors w-full text-center py-1 block"
                         >
                             Manage connections
-                        </button>
+                        </Link>
                     </div>
                 )}
             </div>
@@ -157,4 +217,3 @@ const LeftSidebar = ({ currentView, onNavigate }) => {
 };
 
 export default LeftSidebar;
-

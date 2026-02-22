@@ -1,84 +1,127 @@
-import { useState } from 'react';
-import Feed from './components/Feed';
-import Header from './components/Header';
-import LeftSidebar from './components/LeftSidebar';
-import RightSidebar from './components/RightSidebar';
-import Shorts from './components/Shorts';
-import ShortsSidebar from './components/ShortsSidebar';
-import FounderIdentity from './components/FounderIdentity';
-import CreateBuildUpdate from './components/CreateBuildUpdate';
-import CreatePost from './components/CreatePost';
-import FounderDiscovery from './components/FounderDiscovery';
-import Messages from './components/Messages';
-import InvestorDashboard from './components/InvestorDashboard';
+import { useState, lazy, Suspense } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import FounderLayout from './components/FounderLayout';
 import InvestorLayout from './components/InvestorLayout';
+import LoadingSpinner from './components/LoadingSpinner';
+import ErrorBoundary from './components/ErrorBoundary';
 import { DataProvider } from './context/DataContext';
+import { GamificationProvider } from './context/GamificationContext';
+
+// Lazy-loaded route components
+const Feed = lazy(() => import('./components/Feed'));
+const Shorts = lazy(() => import('./components/Shorts'));
+const StartupPage = lazy(() => import('./components/StartupPage'));
+const ProjectsFeed = lazy(() => import('./components/ProjectsFeed'));
+const FounderDiscovery = lazy(() => import('./components/FounderDiscovery'));
+const CommunityHelp = lazy(() => import('./components/CommunityHelp'));
+const FreelancingMarketplace = lazy(() => import('./components/FreelancingMarketplace'));
+const ProfilePage = lazy(() => import('./components/ProfilePage'));
+const Messages = lazy(() => import('./components/Messages'));
+const CreatePost = lazy(() => import('./components/CreatePost'));
+const CreateBuildUpdate = lazy(() => import('./components/CreateBuildUpdate'));
+const CreateProject = lazy(() => import('./components/CreateProject'));
+const GamificationDashboard = lazy(() => import('./components/GamificationDashboard'));
+const InvestorDashboard = lazy(() => import('./components/InvestorDashboard'));
+const AccessRestricted = lazy(() => import('./components/AccessRestricted'));
+const FounderIdentity = lazy(() => import('./components/FounderIdentity'));
 
 function App() {
-  const [currentView, setCurrentView] = useState('home');
-
   // Simulated User State
   const [user, setUser] = useState({
     name: "Arjun",
-    roles: ["founder", "investor"], // Can be "founder", "investor", or both
+    roles: ["founder", "investor"],
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
   });
 
   // Initialize mode based on role
-  // If user only has investor role, default to investor mode. Otherwise founder.
   const [activeMode, setActiveMode] = useState(() => {
     if (user.roles.includes('investor') && !user.roles.includes('founder')) return 'investor';
     return 'founder';
   });
 
+  const navigate = useNavigate();
+
   const hasRole = (role) => user.roles.includes(role);
 
   const switchMode = (mode) => {
     setActiveMode(mode);
-    // Navigate to default view for that mode
-    if (mode === 'investor') setCurrentView('investor-dashboard');
-    else setCurrentView('home');
+    if (mode === 'investor') navigate('/investor');
+    else navigate('/');
   };
 
-  // Placeholder for handleRoleChange, assuming it will be defined elsewhere or is a prop
-  // For the purpose of this edit, we assume handleRoleChange is accessible in this scope.
   const handleRoleChange = (newRole) => {
     console.log("Role changed to:", newRole);
-    // In a real app, this would update the user's roles or active mode
-    // For now, it just logs.
+    switch (newRole) {
+      case 'user':
+        setUser(prev => ({ ...prev, roles: [] }));
+        break;
+      case 'founder':
+        setUser(prev => ({ ...prev, roles: ['founder'] }));
+        setActiveMode('founder');
+        navigate('/');
+        break;
+      case 'investor':
+        setUser(prev => ({ ...prev, roles: ['investor'] }));
+        setActiveMode('investor');
+        navigate('/investor');
+        break;
+      case 'founder_investor':
+        setUser(prev => ({ ...prev, roles: ['founder', 'investor'] }));
+        break;
+      default:
+        break;
+    }
   };
 
-  const isShortsView = currentView === 'shorts';
-  const currentUserId = 'founder-1'; // Default to first founder for demo
+  const currentUserId = 'founder-1';
 
-  if (activeMode === 'investor' && hasRole('investor')) {
-    return (
-      <DataProvider currentUserId={currentUserId}>
-        <InvestorLayout
-          currentView={currentView}
-          onNavigate={setCurrentView}
-          user={user}
-          activeMode={activeMode}
-          hasRole={hasRole}
-          switchMode={switchMode}
-          onSwitchRole={handleRoleChange}
-        />
-      </DataProvider>
-    );
-  }
+  const sharedProps = {
+    user,
+    activeMode,
+    hasRole,
+    switchMode,
+    onSwitchRole: handleRoleChange,
+  };
 
   return (
     <DataProvider currentUserId={currentUserId}>
-      <FounderLayout
-        currentView={currentView}
-        onNavigate={setCurrentView}
-        user={user}
-        activeMode={activeMode}
-        hasRole={hasRole}
-        switchMode={switchMode}
-        onSwitchRole={handleRoleChange}
-      />
+      <GamificationProvider>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingSpinner />}>
+            <Routes>
+              {/* Founder routes */}
+              <Route element={<FounderLayout {...sharedProps} />}>
+                <Route index element={<Feed />} />
+                <Route path="shorts" element={<Shorts />} />
+                <Route path="startup" element={<StartupPage user={user} />} />
+                <Route path="projects" element={<ProjectsFeed />} />
+                <Route path="network" element={<FounderDiscovery />} />
+                <Route path="community" element={<CommunityHelp />} />
+                <Route path="freelance" element={<FreelancingMarketplace />} />
+                <Route path="gamification" element={<GamificationDashboard />} />
+                <Route path="profile" element={<ProfilePage user={user} activeMode={activeMode} switchMode={switchMode} hasRole={hasRole} />} />
+                <Route path="messages" element={<Messages />} />
+                <Route path="create-post" element={<CreatePost user={user} currentUserId={currentUserId} />} />
+                <Route path="create-update" element={<CreateBuildUpdate hasRole={hasRole} user={user} currentUserId={currentUserId} />} />
+                <Route path="create-project" element={<CreateProject user={user} currentUserId={currentUserId} />} />
+              </Route>
+
+            {/* Investor routes */}
+            <Route path="investor" element={<InvestorLayout {...sharedProps} />}>
+              <Route index element={<InvestorDashboard hasRole={hasRole} />} />
+              <Route path="discover" element={<FounderDiscovery />} />
+              <Route path="saved" element={<AccessRestricted role="investor" message="Saved Startups" description="This feature is coming soon." />} />
+              <Route path="messages" element={<Messages />} />
+              <Route path="profile" element={<FounderIdentity activeMode={activeMode} hasRole={hasRole} user={user} />} />
+              <Route path="gamification" element={<GamificationDashboard />} />
+            </Route>
+
+            {/* Catch-all */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
+      </GamificationProvider>
     </DataProvider>
   );
 }

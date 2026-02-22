@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Video, FileText, TrendingUp, Play, CheckCircle2, HelpCircle, Briefcase, BarChart2, Image as ImageIcon, Plus, X } from 'lucide-react';
 import { useData } from '../context/DataContext';
 
-const CreatePost = ({ onCancel, user, currentUserId }) => {
+const CreatePost = ({ user, currentUserId }) => {
+    const navigate = useNavigate();
     const [selectedFormat, setSelectedFormat] = useState('Video');
     const [formData, setFormData] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,8 +35,8 @@ const CreatePost = ({ onCancel, user, currentUserId }) => {
                         key={format.id}
                         onClick={() => setSelectedFormat(format.id)}
                         className={`flex-shrink-0 w-32 p-3 rounded-xl border text-left transition-all group ${selectedFormat === format.id
-                                ? 'border-blue-600 bg-blue-600 text-white shadow-lg shadow-blue-200'
-                                : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
+                            ? 'border-blue-600 bg-blue-600 text-white shadow-lg shadow-blue-200'
+                            : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
                             }`}
                     >
                         <format.icon className={`w-5 h-5 mb-2 ${selectedFormat === format.id ? 'text-white' : 'text-gray-500 group-hover:text-gray-900'}`} />
@@ -57,7 +59,7 @@ const CreatePost = ({ onCancel, user, currentUserId }) => {
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-3 pt-6 mt-6 border-t border-gray-100">
                     <button
-                        onClick={onCancel}
+                        onClick={() => navigate('/')}
                         className="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
                         disabled={isSubmitting}
                     >
@@ -77,7 +79,7 @@ const CreatePost = ({ onCancel, user, currentUserId }) => {
                                     time: 'just now'
                                 });
                                 setFormData({});
-                                onCancel();
+                                navigate('/');
                             } catch (error) {
                                 console.error('Error publishing post:', error);
                                 alert('Failed to publish post. Please try again.');
@@ -86,9 +88,8 @@ const CreatePost = ({ onCancel, user, currentUserId }) => {
                             }
                         }}
                         disabled={isSubmitting}
-                        className={`px-6 py-2.5 text-sm font-bold text-white rounded-lg shadow-lg shadow-gray-200 transition-all transform hover:-translate-y-0.5 ${
-                            isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-                        }`}
+                        className={`px-6 py-2.5 text-sm font-bold text-white rounded-lg shadow-lg shadow-gray-200 transition-all transform hover:-translate-y-0.5 ${isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                            }`}
                     >
                         {isSubmitting ? 'Publishing...' : `Publish ${selectedFormat}`}
                     </button>

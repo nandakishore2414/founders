@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CheckCircle2, TrendingUp, ArrowRight, XCircle, Lightbulb, DollarSign, MessageCircle, Users, Image as ImageIcon, X, Lock } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import AccessRestricted from './AccessRestricted';
 
-const CreateBuildUpdate = ({ onCancel, hasRole, user, currentUserId }) => {
+const CreateBuildUpdate = ({ hasRole, user, currentUserId }) => {
+    const navigate = useNavigate();
     const [selectedType, setSelectedType] = useState('Feature Shipped');
     const [headline, setHeadline] = useState('');
     const [whatWeDid, setWhatWeDid] = useState('');
@@ -134,7 +136,7 @@ const CreateBuildUpdate = ({ onCancel, hasRole, user, currentUserId }) => {
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
                     <button
-                        onClick={onCancel}
+                        onClick={() => navigate('/')}
                         className="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
                         disabled={isSubmitting}
                     >
@@ -159,7 +161,7 @@ const CreateBuildUpdate = ({ onCancel, hasRole, user, currentUserId }) => {
                                     founderAvatar: user?.avatar || '',
                                     startupName: 'Startup' // Would come from user profile
                                 });
-                                onCancel(); // Navigate back
+                                navigate('/'); // Navigate back
                             } catch (error) {
                                 console.error('Error publishing update:', error);
                                 alert('Failed to publish update. Please try again.');
@@ -168,11 +170,10 @@ const CreateBuildUpdate = ({ onCancel, hasRole, user, currentUserId }) => {
                             }
                         }}
                         disabled={isSubmitting || !headline.trim() || !whatWeDid.trim()}
-                        className={`px-6 py-2.5 text-sm font-bold text-white rounded-lg shadow-lg shadow-gray-200 transition-all transform hover:-translate-y-0.5 ${
-                            isSubmitting || !headline.trim() || !whatWeDid.trim()
+                        className={`px-6 py-2.5 text-sm font-bold text-white rounded-lg shadow-lg shadow-gray-200 transition-all transform hover:-translate-y-0.5 ${isSubmitting || !headline.trim() || !whatWeDid.trim()
                                 ? 'bg-gray-400 cursor-not-allowed'
                                 : 'bg-blue-600 hover:bg-blue-700'
-                        }`}
+                            }`}
                     >
                         {isSubmitting ? 'Publishing...' : 'Publish Update'}
                     </button>
