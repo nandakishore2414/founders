@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { HelpCircle, HandHeart, MessageSquare, ThumbsUp, Filter, Search, Plus, Tag } from 'lucide-react';
+import { HelpCircle, HandHeart, MessageSquare, ThumbsUp, Search, Plus, Tag } from 'lucide-react';
 import { useData } from '../context/DataContext';
+import CollaborationRequestModal from './CollaborationRequestModal';
 
-const CommunityHelp = ({ onNavigate }) => {
-    const { communityPosts, founders, addCommunityPost } = useData();
+const CommunityHelp = () => {
+    const { communityPosts, founders, currentFounder, addCommunityPost, addCollaborationRequest, getCollaborationRequestsForSource } = useData();
     const [activeTab, setActiveTab] = useState('all'); // 'all', 'ask', 'offer'
     const [searchQuery, setSearchQuery] = useState('');
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showRequestModal, setShowRequestModal] = useState(false);
+    const [selectedPost, setSelectedPost] = useState(null);
     const [formData, setFormData] = useState({
         type: 'ask',
         title: '',
@@ -17,8 +20,6 @@ const CommunityHelp = ({ onNavigate }) => {
     const [tagInput, setTagInput] = useState('');
 
     const categories = ['Technical', 'Business', 'Design', 'Marketing', 'Legal', 'Funding', 'Product', 'Other'];
-    const tagsOptions = ['React', 'Node.js', 'Marketing', 'Design', 'Funding', 'Legal', 'Product', 'Growth'];
-
     const filteredPosts = communityPosts.filter(post => {
         const matchesTab = activeTab === 'all' || post.type === activeTab;
         const matchesSearch = !searchQuery || 
@@ -52,6 +53,44 @@ const CommunityHelp = ({ onNavigate }) => {
             setFormData({ ...formData, tags: [...formData.tags, tagInput.trim()] });
             setTagInput('');
         }
+    };
+
+    const openRequestModal = (post) => {
+        if (!currentFounder) {
+            alert('Please complete your profile before sending requests.');
+            return;
+        }
+
+        if (post.authorId === currentFounder.id) {
+            alert('You cannot request your own post.');
+            return;
+        }
+
+        setSelectedPost(post);
+        setShowRequestModal(true);
+    };
+
+    const closeRequestModal = () => {
+        setShowRequestModal(false);
+        setSelectedPost(null);
+    };
+
+    const handleSubmitRequest = (requestForm) => {
+        if (!selectedPost || !currentFounder) return;
+
+        addCollaborationRequest({
+            sourceType: 'community',
+            sourceId: selectedPost.id,
+            sourceTitle: selectedPost.title,
+            fromId: currentFounder.id,
+            toId: selectedPost.authorId,
+            intent: requestForm.intent,
+            compensationType: requestForm.compensationType,
+            amount: requestForm.amount,
+            message: requestForm.message
+        });
+
+        closeRequestModal();
     };
 
     return (
@@ -141,6 +180,8 @@ const CommunityHelp = ({ onNavigate }) => {
                 <div className="space-y-4">
                     {filteredPosts.map(post => {
                         const author = getAuthorInfo(post.authorId);
+                        const requestCount = getCollaborationRequestsForSource('community', post.id).length;
+                        const isOwnPost = post.authorId === currentFounder?.id;
                         return (
                             <div
                                 key={post.id}
@@ -196,8 +237,16 @@ const CommunityHelp = ({ onNavigate }) => {
                                                 <MessageSquare className="w-4 h-4" />
                                                 <span className="text-sm font-medium">{post.responses?.length || 0} Responses</span>
                                             </button>
-                                            <button className="ml-auto px-4 py-1.5 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
-                                                {post.type === 'ask' ? 'Offer Help' : 'Get Help'}
+                                            <span className="text-xs text-gray-500">{requestCount} requests</span>
+                                            <button
+                                                onClick={() => openRequestModal(post)}
+                                                disabled={isOwnPost}
+                                                className={`ml-auto px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${isOwnPost
+                                                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                                                        : 'bg-green-600 text-white hover:bg-green-700'
+                                                    }`}
+                                            >
+                                                {isOwnPost ? 'Your Post' : post.type === 'ask' ? 'Offer Help' : 'Get Help'}
                                             </button>
                                         </div>
                                     </div>
@@ -206,6 +255,24 @@ const CommunityHelp = ({ onNavigate }) => {
                         );
                     })}
                 </div>
+            )}
+
+            {showRequestModal && (
+                <CollaborationRequestModal
+                    onClose={closeRequestModal}
+                    onSubmit={handleSubmitRequest}
+                    contextTitle={selectedPost ? selectedPost.title : ''}
+                    intentOptions={selectedPost?.type === 'ask'
+                        ? [
+                            { value: 'help', label: 'Offer practical help' },
+                            { value: 'join', label: 'Join as collaborator' }
+                        ]
+                        : [
+                            { value: 'request_help', label: 'Request this support' }
+                        ]}
+                    defaultIntent={selectedPost?.type === 'ask' ? 'help' : 'request_help'}
+                    submitLabel="Send Community Request"
+                />
             )}
 
             {/* Create Modal */}

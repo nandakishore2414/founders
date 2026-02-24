@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Rocket, Heart, MessageCircle, Eye, Users, Tag, Filter, Search, Sparkles } from 'lucide-react';
+import { Rocket, Heart, MessageCircle, Eye, Users, Tag, Filter, Search, Sparkles, UserPlus } from 'lucide-react';
 import { useData } from '../context/DataContext';
+import CollaborationRequestModal from './CollaborationRequestModal';
 
 const ProjectsFeed = () => {
     const navigate = useNavigate();
-    const { projects, founders } = useData();
+    const { projects, founders, currentFounder, addCollaborationRequest, getCollaborationRequestsForSource } = useData();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedStage, setSelectedStage] = useState('All');
     const [selectedIndustry, setSelectedIndustry] = useState('All');
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [showRequestModal, setShowRequestModal] = useState(false);
 
     const stages = ['All', 'Idea', 'Validation', 'MVP', 'Early Revenue', 'Scaling'];
     const industries = ['All', 'SaaS', 'FinTech', 'HealthTech', 'EdTech', 'AI/ML', 'E-commerce', 'DevTools'];
@@ -25,6 +28,44 @@ const ProjectsFeed = () => {
 
     const getCreatorInfo = (creatorId) => {
         return founders.find(f => f.id === creatorId) || { name: 'Unknown', avatar: '' };
+    };
+
+    const openRequestModal = (project) => {
+        if (!currentFounder) {
+            alert('Please complete your profile before sending requests.');
+            return;
+        }
+
+        if (project.creatorId === currentFounder.id) {
+            alert('You cannot request your own project.');
+            return;
+        }
+
+        setSelectedProject(project);
+        setShowRequestModal(true);
+    };
+
+    const closeRequestModal = () => {
+        setShowRequestModal(false);
+        setSelectedProject(null);
+    };
+
+    const handleSubmitRequest = (requestForm) => {
+        if (!selectedProject || !currentFounder) return;
+
+        addCollaborationRequest({
+            sourceType: 'project',
+            sourceId: selectedProject.id,
+            sourceTitle: selectedProject.title,
+            fromId: currentFounder.id,
+            toId: selectedProject.creatorId,
+            intent: requestForm.intent,
+            compensationType: requestForm.compensationType,
+            amount: requestForm.amount,
+            message: requestForm.message
+        });
+
+        closeRequestModal();
     };
 
     return (
@@ -107,6 +148,8 @@ const ProjectsFeed = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     {filteredProjects.map(project => {
                         const creator = getCreatorInfo(project.creatorId);
+                        const requestCount = getCollaborationRequestsForSource('project', project.id).length;
+                        const isOwnProject = project.creatorId === currentFounder?.id;
                         return (
                             <div
                                 key={project.id}
@@ -193,14 +236,39 @@ const ProjectsFeed = () => {
                                             <span className="text-xs md:text-sm font-medium hidden sm:inline">{project.views || 0}</span>
                                         </button>
                                     </div>
-                                    <button className="px-3 md:px-4 py-1.5 bg-blue-600 text-white rounded-lg text-xs md:text-sm font-medium hover:bg-blue-700 transition-colors whitespace-nowrap">
-                                        View Details
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs text-gray-500 whitespace-nowrap">{requestCount} requests</span>
+                                        <button
+                                            onClick={() => openRequestModal(project)}
+                                            disabled={isOwnProject}
+                                            className={`px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1.5 ${isOwnProject
+                                                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                                                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                                                }`}
+                                        >
+                                            <UserPlus className="w-4 h-4" />
+                                            {isOwnProject ? 'Your Project' : 'Request to Join'}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         );
                     })}
                 </div>
+            )}
+
+            {showRequestModal && (
+                <CollaborationRequestModal
+                    onClose={closeRequestModal}
+                    onSubmit={handleSubmitRequest}
+                    contextTitle={selectedProject ? selectedProject.title : ''}
+                    intentOptions={[
+                        { value: 'join', label: 'Join this project' },
+                        { value: 'help', label: 'Offer targeted help' }
+                    ]}
+                    defaultIntent="join"
+                    submitLabel="Send Project Request"
+                />
             )}
         </div>
     );

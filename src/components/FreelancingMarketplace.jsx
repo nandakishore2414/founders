@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Briefcase, DollarSign, Clock, MapPin, Search, Filter, Plus, Tag, CheckCircle } from 'lucide-react';
 import { useData } from '../context/DataContext';
+import CollaborationRequestModal from './CollaborationRequestModal';
 
-const FreelancingMarketplace = ({ onNavigate }) => {
-    const { freelancingListings, founders, addFreelancingListing } = useData();
+const FreelancingMarketplace = () => {
+    const { freelancingListings, founders, currentFounder, addFreelancingListing, addCollaborationRequest, getCollaborationRequestsForSource } = useData();
     const [activeTab, setActiveTab] = useState('all'); // 'all', 'job', 'service'
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showRequestModal, setShowRequestModal] = useState(false);
+    const [selectedListing, setSelectedListing] = useState(null);
     const [formData, setFormData] = useState({
         type: 'job',
         title: '',
@@ -21,8 +24,6 @@ const FreelancingMarketplace = ({ onNavigate }) => {
     const [skillInput, setSkillInput] = useState('');
 
     const categories = ['Development', 'Design', 'Marketing', 'Writing', 'Business', 'Other'];
-    const skillsOptions = ['React', 'Node.js', 'UI/UX', 'SEO', 'Content Writing', 'Business Strategy', 'Data Analysis'];
-
     const filteredListings = freelancingListings.filter(listing => {
         const matchesTab = activeTab === 'all' || listing.type === activeTab;
         const matchesSearch = !searchQuery || 
@@ -57,6 +58,44 @@ const FreelancingMarketplace = ({ onNavigate }) => {
             setFormData({ ...formData, skills: [...formData.skills, skillInput.trim()] });
             setSkillInput('');
         }
+    };
+
+    const openRequestModal = (listing) => {
+        if (!currentFounder) {
+            alert('Please complete your profile before sending requests.');
+            return;
+        }
+
+        if (listing.creatorId === currentFounder.id) {
+            alert('You cannot request your own listing.');
+            return;
+        }
+
+        setSelectedListing(listing);
+        setShowRequestModal(true);
+    };
+
+    const closeRequestModal = () => {
+        setShowRequestModal(false);
+        setSelectedListing(null);
+    };
+
+    const handleSubmitRequest = (requestForm) => {
+        if (!selectedListing || !currentFounder) return;
+
+        addCollaborationRequest({
+            sourceType: 'freelance',
+            sourceId: selectedListing.id,
+            sourceTitle: selectedListing.title,
+            fromId: currentFounder.id,
+            toId: selectedListing.creatorId,
+            intent: requestForm.intent,
+            compensationType: requestForm.compensationType,
+            amount: requestForm.amount,
+            message: requestForm.message
+        });
+
+        closeRequestModal();
     };
 
     return (
@@ -161,6 +200,8 @@ const FreelancingMarketplace = ({ onNavigate }) => {
                 <div className="grid md:grid-cols-2 gap-6">
                     {filteredListings.map(listing => {
                         const creator = getCreatorInfo(listing.creatorId);
+                        const requestCount = getCollaborationRequestsForSource('freelance', listing.id).length;
+                        const isOwnListing = listing.creatorId === currentFounder?.id;
                         return (
                             <div
                                 key={listing.id}
@@ -237,20 +278,43 @@ const FreelancingMarketplace = ({ onNavigate }) => {
                                 {/* Actions */}
                                 <div className="px-5 py-4 flex items-center justify-between">
                                     <span className="text-sm text-gray-600">
-                                        {listing.applications?.length || 0} {listing.type === 'job' ? 'applications' : 'interested'}
+                                        {requestCount} {listing.type === 'job' ? 'applications' : 'requests'}
                                     </span>
-                                    <button className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                                        listing.type === 'job'
-                                            ? 'bg-blue-600 text-white hover:bg-blue-700'
-                                            : 'bg-green-600 text-white hover:bg-green-700'
-                                    }`}>
-                                        {listing.type === 'job' ? 'Apply Now' : 'Get Service'}
+                                    <button
+                                        onClick={() => openRequestModal(listing)}
+                                        disabled={isOwnListing}
+                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isOwnListing
+                                                ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                                                : listing.type === 'job'
+                                                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                                    : 'bg-green-600 text-white hover:bg-green-700'
+                                            }`}
+                                    >
+                                        {isOwnListing ? 'Your Listing' : listing.type === 'job' ? 'Apply Now' : 'Get Service'}
                                     </button>
                                 </div>
                             </div>
                         );
                     })}
                 </div>
+            )}
+
+            {showRequestModal && (
+                <CollaborationRequestModal
+                    onClose={closeRequestModal}
+                    onSubmit={handleSubmitRequest}
+                    contextTitle={selectedListing ? selectedListing.title : ''}
+                    intentOptions={selectedListing?.type === 'job'
+                        ? [
+                            { value: 'apply', label: 'Apply for this job' },
+                            { value: 'help', label: 'Offer part-time help' }
+                        ]
+                        : [
+                            { value: 'hire_service', label: 'Request this service' }
+                        ]}
+                    defaultIntent={selectedListing?.type === 'job' ? 'apply' : 'hire_service'}
+                    submitLabel="Send Freelance Request"
+                />
             )}
 
             {/* Create Modal */}

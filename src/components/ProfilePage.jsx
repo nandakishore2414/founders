@@ -192,7 +192,7 @@ const ProfilePage = ({ user, activeMode, switchMode, hasRole }) => {
     const isFounderMode = activeMode === 'founder';
 
     return (
-        <div className="max-w-4xl mx-auto pb-12 profile-page-enter">
+        <div className="pb-12 profile-page-enter">
 
             {/* ── Cover Banner ── */}
             <div className="relative h-44 md:h-52 rounded-b-3xl overflow-hidden group">

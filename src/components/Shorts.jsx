@@ -159,29 +159,29 @@ const ReelCard = ({ reel }) => {
             label={reel.likes}
             isActive={isLiked}
             activeColor="text-rose-500 fill-rose-500"
-            color="text-blue-500"
+            color="text-slate-700"
             onClick={() => setIsLiked(!isLiked)}
           />
           <ActionItem
             icon={MessageCircle}
             label={reel.comments}
-            color="text-blue-500"
+            color="text-slate-700"
           />
           <ActionItem
             icon={Send}
             label={reel.shares}
-            color="text-blue-500"
+            color="text-slate-700"
           />
           <ActionItem
             icon={Bookmark}
             isActive={isSaved}
-            activeColor="text-blue-600 fill-blue-600"
-            color="text-blue-500"
+            activeColor="text-slate-900 fill-slate-900"
+            color="text-slate-700"
             onClick={() => setIsSaved(!isSaved)}
           />
           <ActionItem
             icon={MoreVertical}
-            color="text-blue-500"
+            color="text-slate-700"
           />
         </div>
         <div className="w-10 h-10 rounded-lg overflow-hidden mt-2" style={{ border: '2px solid rgba(147, 197, 253, 0.5)', background: 'white' }}>
@@ -192,17 +192,17 @@ const ReelCard = ({ reel }) => {
   );
 };
 
-const ActionItem = ({ icon: Icon, label, isActive, activeColor, color = "text-blue-500", onClick }) => {
+const ActionItem = ({ icon: Icon, label, isActive, activeColor, color = "text-slate-700", onClick }) => {
   return (
     <div className="flex flex-col items-center gap-1 cursor-pointer group" onClick={onClick}>
-      <div className="p-2.5 rounded-full transition-all transform group-hover:scale-110 active:scale-95" style={{ background: 'rgba(255, 255, 255, 0.8)', border: '1px solid rgba(147, 197, 253, 0.35)', boxShadow: '0 2px 8px rgba(59, 130, 246, 0.08)' }}>
+      <div className="p-2.5 rounded-full transition-all transform group-hover:scale-110 active:scale-95" style={{ background: 'rgba(255, 255, 255, 0.85)', border: '1px solid rgba(148, 163, 184, 0.35)', boxShadow: '0 2px 8px rgba(15, 23, 42, 0.08)' }}>
         <Icon
           className={`w-7 h-7 ${isActive ? activeColor : color}`}
           strokeWidth={1.5}
         />
       </div>
       {label && (
-        <span className="text-xs font-medium text-blue-600/70 text-center">
+        <span className="text-xs font-medium text-slate-600 text-center">
           {label}
         </span>
       )}

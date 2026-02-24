@@ -1,9 +1,36 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Users, Play, UserCircle, LogOut, Briefcase } from 'lucide-react';
+import {
+    Home,
+    Users,
+    Play,
+    UserCircle,
+    Briefcase,
+    Rocket,
+    Sparkles,
+    HandHeart
+} from 'lucide-react';
 
-const ShortsSidebar = ({ activeMode }) => {
+const isPathActive = (pathname, to) => {
+    if (to === '/') return pathname === '/';
+    return pathname === to || pathname.startsWith(`${to}/`);
+};
+
+const ShortsSidebar = ({ activeMode, user }) => {
     const location = useLocation();
+    const avatarSrc = user?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix';
+
+    const navItems = [
+        { icon: Home, label: 'Home', to: '/' },
+        { icon: Users, label: 'Network', to: '/network' },
+        { icon: Play, label: 'Shorts', to: '/shorts' },
+        { icon: Rocket, label: 'Startup', to: '/startup' },
+        { icon: Sparkles, label: 'Projects', to: '/projects' },
+        { icon: HandHeart, label: 'Community', to: '/community' },
+        activeMode === 'founder'
+            ? { icon: UserCircle, label: 'Profile', to: '/profile' }
+            : { icon: Briefcase, label: 'Invest', to: '/investor' }
+    ];
 
     return (
         <div className="fixed left-0 top-0 bottom-0 w-16 flex flex-col items-center py-6 z-50" style={{ background: 'linear-gradient(180deg, #ffffff 0%, #f0f5ff 50%, #e8f0fe 100%)', borderRight: '1px solid rgba(147, 197, 253, 0.4)' }}>
@@ -17,23 +44,23 @@ const ShortsSidebar = ({ activeMode }) => {
             </Link>
 
             {/* Navigation Items */}
-            <div className="flex flex-col gap-6 flex-1 w-full items-center">
-                <NavIcon icon={Home} label="Home" to="/" active={location.pathname === '/'} />
-                <NavIcon icon={Users} label="Networks" to="/network" active={location.pathname === '/network'} />
-                <NavIcon icon={Play} label="Shorts" to="/shorts" active={location.pathname === '/shorts'} />
-
-                {activeMode === 'founder' ? (
-                    <NavIcon icon={UserCircle} label="Profile" to="/profile" active={location.pathname === '/profile'} />
-                ) : (
-                    <NavIcon icon={Briefcase} label="Invest" to="/investor" active={location.pathname === '/investor'} />
-                )}
+            <div className="flex flex-col gap-4 flex-1 w-full items-center overflow-y-auto scrollbar-hide pb-2">
+                {navItems.map((item) => (
+                    <NavIcon
+                        key={item.to}
+                        icon={item.icon}
+                        label={item.label}
+                        to={item.to}
+                        active={isPathActive(location.pathname, item.to)}
+                    />
+                ))}
             </div>
 
             {/* Bottom Actions */}
             <div className="mt-auto">
                 {/* Profile Avatar */}
                 <div className="w-10 h-10 rounded-full overflow-hidden cursor-pointer hover:ring-2 hover:ring-offset-2 hover:ring-blue-500 transition-all" style={{ border: '2px solid rgba(147, 197, 253, 0.6)' }}>
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" className="w-full h-full object-cover" loading="lazy" />
+                    <img src={avatarSrc} alt="Profile" className="w-full h-full object-cover" loading="lazy" />
                 </div>
             </div>
         </div>
